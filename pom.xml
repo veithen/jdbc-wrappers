@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>net.sf.springderby</groupId>
 			<artifactId>spring-derby</artifactId>
-			<version>SNAPSHOT</version>
+			<version>0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
