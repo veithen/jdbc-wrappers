@@ -91,10 +91,12 @@
 	<distributionManagement>
 		<!-- Use "mvn site:deploy" to upload -->
 		<site>
+			<id>jdbc-wrappers-site</id>
 			<url>scp://shell.sf.net/home/groups/j/jd/jdbc-wrappers/htdocs/</url>
 		</site>
 		<!-- Use "mvn deploy" to upload -->
 		<snapshotRepository>
+			<id>jdbc-wrappers-snapshot-repository</id>
 			<url>scpexe://shell.sf.net/home/groups/j/jd/jdbc-wrappers/htdocs/repository/</url>
 		</snapshotRepository>
 	</distributionManagement>
