@@ -18,7 +18,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.jdbcwrappers</groupId>
 	<artifactId>jdbc-wrappers</artifactId>
-	<version>SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<name>JDBC Wrappers</name>
 	<packaging>jar</packaging>
 	
