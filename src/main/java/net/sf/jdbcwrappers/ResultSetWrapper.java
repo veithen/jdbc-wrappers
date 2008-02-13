@@ -37,15 +37,16 @@ import java.util.Map;
  * Except for {@link #getStatement()}, all methods delegate to the target {@link ResultSet} object.
  * 
  * @author Andreas Veithen
- * @version $Id: ResultSetWrapper.java 50 2008-02-09 22:44:14Z veithen $
+ * @version $Id$
  */
-public class ResultSetWrapper implements ResultSet {
+public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 	private Statement statementWrapper;
 	private ResultSet parent;
 	
-	final void init(Statement statementWrapper, ResultSet parent) {
+	final void init(Statement statementWrapper, ResultSet parent) throws SQLException {
 		this.statementWrapper = statementWrapper;
 		this.parent = parent;
+		init();
 	}
 	
 	/**

@@ -31,15 +31,16 @@ import java.util.Map;
  * object that created the {@link ConnectionWrapper}.
  * 
  * @author Andreas Veithen
- * @version $Id: ConnectionWrapper.java 53 2008-02-10 22:53:57Z veithen $
+ * @version $Id$
  */
-public class ConnectionWrapper implements Connection {
+public class ConnectionWrapper extends AbstractWrapper implements Connection {
 	private WrapperFactory wrapperFactory;
 	private Connection parent;
 	
-	final void init(WrapperFactory wrapperFactory, Connection parent) {
+	final void init(WrapperFactory wrapperFactory, Connection parent) throws SQLException {
 		this.wrapperFactory = wrapperFactory;
 		this.parent = parent;
+		init();
 	}
 	
 	/**

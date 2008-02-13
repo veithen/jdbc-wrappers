@@ -25,17 +25,18 @@ import java.sql.Statement;
  * {@link ResultSet} objects are wrapped using the {@link WrapperFactory} object.
  * 
  * @author Andreas Veithen
- * @version $Id: StatementWrapper.java 50 2008-02-09 22:44:14Z veithen $
+ * @version $Id$
  */
-public class StatementWrapper implements Statement {
+public class StatementWrapper extends AbstractWrapper implements Statement {
 	private WrapperFactory wrapperFactory;
 	private ConnectionWrapper connectionWrapper;
 	private Statement parent;
 	
-	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, Statement parent) {
+	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, Statement parent) throws SQLException {
 		this.wrapperFactory = wrapperFactory;
 		this.connectionWrapper = connectionWrapper;
 		this.parent = parent;
+		init();
 	}
 	
 	/**

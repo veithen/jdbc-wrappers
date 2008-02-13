@@ -24,15 +24,16 @@ import java.sql.SQLException;
  * Note that {@link ResultSet} objects returned by methods in this class are not wrapped.
  * 
  * @author Andreas Veithen
- * @version $Id: DatabaseMetaDataWrapper.java 52 2008-02-10 13:42:19Z veithen $
+ * @version $Id$
  */
-public class DatabaseMetaDataWrapper implements DatabaseMetaData {
+public class DatabaseMetaDataWrapper extends AbstractWrapper implements DatabaseMetaData {
 	private ConnectionWrapper connectionWrapper;
 	private DatabaseMetaData parent;
 	
-	final void init(ConnectionWrapper connectionWrapper, DatabaseMetaData parent) {
+	final void init(ConnectionWrapper connectionWrapper, DatabaseMetaData parent) throws SQLException {
 		this.connectionWrapper = connectionWrapper;
 		this.parent = parent;
+		init();
 	}
 	
 	/**

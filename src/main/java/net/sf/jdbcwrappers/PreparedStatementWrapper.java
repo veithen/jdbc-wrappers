@@ -20,17 +20,18 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-public class PreparedStatementWrapper implements PreparedStatement {
+public class PreparedStatementWrapper extends AbstractWrapper implements PreparedStatement {
 	private WrapperFactory wrapperFactory;
 	private StatementWrapper statementWrapper;
 	private PreparedStatement parent;
 	private String sql;
 	
-	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, PreparedStatement parent, String sql) {
+	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, PreparedStatement parent, String sql) throws SQLException {
 		this.wrapperFactory = wrapperFactory;
 		statementWrapper = wrapperFactory.wrapStatement(connectionWrapper, parent);
 		this.parent = parent;
 		this.sql = sql;
+		init();
 	}
 	
 	/**
