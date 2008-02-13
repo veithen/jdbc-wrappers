@@ -20,7 +20,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-public class PreparedStatementWrapper extends AbstractWrapper implements PreparedStatement {
+public class PreparedStatementWrapper extends AbstractWrapper implements PreparedStatement, HasConnection {
 	private WrapperFactory wrapperFactory;
 	private StatementWrapper statementWrapper;
 	private PreparedStatement parent;

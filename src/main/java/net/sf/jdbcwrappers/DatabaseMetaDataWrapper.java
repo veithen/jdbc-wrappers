@@ -26,7 +26,7 @@ import java.sql.SQLException;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class DatabaseMetaDataWrapper extends AbstractWrapper implements DatabaseMetaData {
+public class DatabaseMetaDataWrapper extends AbstractWrapper implements DatabaseMetaData, HasConnection {
 	private ConnectionWrapper connectionWrapper;
 	private DatabaseMetaData parent;
 	

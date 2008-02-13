@@ -22,7 +22,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 
-public class CallableStatementWrapper extends AbstractWrapper implements CallableStatement {
+public class CallableStatementWrapper extends AbstractWrapper implements CallableStatement, HasConnection {
 	private WrapperFactory wrapperFactory;
 	private PreparedStatementWrapper preparedStatementWrapper;
 	private CallableStatement parent;
