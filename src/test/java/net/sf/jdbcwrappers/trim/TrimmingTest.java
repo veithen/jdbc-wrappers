@@ -3,6 +3,7 @@ package net.sf.jdbcwrappers.trim;
 import static org.junit.Assert.assertEquals;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -58,7 +59,7 @@ public class TrimmingTest {
 	}
 	
 	@Test
-	public void testStatement() throws Exception {
+	public void testStatement() throws SQLException {
 		Statement statement = connection.createStatement();
 		try {
 			ResultSet rs = statement.executeQuery("SELECT * FROM TEST");
@@ -67,6 +68,21 @@ public class TrimmingTest {
 			assertEquals("test", rs.getString("CHAR_COL"));
 			assertEquals("test", rs.getObject(2));
 			assertEquals("test", rs.getObject("CHAR_COL"));
+		}
+		finally {
+			statement.close();
+		}
+	}
+	
+	@Test
+	public void testPreparedStatement() throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("SELECT * FROM TEST WHERE INT_COL=?");
+		try {
+			statement.setInt(1, 12);
+			ResultSet rs = statement.executeQuery();
+			rs.next();
+			assertEquals("test", rs.getString(2));
+			assertEquals("test", rs.getString("CHAR_COL"));
 		}
 		finally {
 			statement.close();
