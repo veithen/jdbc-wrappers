@@ -7,13 +7,15 @@ import net.sf.jdbcwrappers.StatementWrapper;
 
 public class LoggingStatementWrapper extends StatementWrapper {
 	private final Logger logger;
+	private final boolean prettyPrint;
 	
-	public LoggingStatementWrapper(Logger logger) {
+	public LoggingStatementWrapper(Logger logger, LoggingConfiguration configuration) {
 		this.logger = logger;
+		prettyPrint = configuration.isPrettyPrintSqlStatements();
 	}
 
 	private void log(String method, String sql) {
-		logger.log(this, method, sql);
+		logger.log(this, method, sql, prettyPrint);
 	}
 	
 	@Override
