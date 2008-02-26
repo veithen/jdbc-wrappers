@@ -35,7 +35,7 @@ public class Logger {
 	
 	private void prettyPrint(String sql, StringBuilder buffer) {
 		// TODO: need something more sophisticated here
-		buffer.append(sql.replaceAll("\\s*", " "));
+		buffer.append(sql.replaceAll("\\s+", " "));
 	}
 	
 	public void log(String message) {
