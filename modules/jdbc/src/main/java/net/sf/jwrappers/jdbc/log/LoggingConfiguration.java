@@ -19,7 +19,7 @@ import java.sql.Connection;
  * Configuration bean for the logging wrapper.
  * 
  * @author Andreas Veithen
- * @version $Id$
+ * @version $Id:LoggingConfiguration.java 24 2008-06-21 15:08:14Z veithen $
  */
 public class LoggingConfiguration {
 	private boolean trackTransactions = false;

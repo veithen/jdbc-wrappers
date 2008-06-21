@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * type.
  * 
  * @author Andreas Veithen
- * @version $Id$
+ * @version $Id:TrimmingResultSetWrapper.java 24 2008-06-21 15:08:14Z veithen $
  */
 public class TrimmingResultSetWrapper extends ResultSetWrapper {
 	private final static Log log = LogFactory.getLog(TrimmingResultSetWrapper.class);
