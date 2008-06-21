@@ -22,10 +22,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 
-public class CallableStatementWrapper extends AbstractWrapper implements CallableStatement, HasConnection {
-	private WrapperFactory wrapperFactory;
+public class CallableStatementWrapper extends AbstractWrapper<CallableStatement> implements CallableStatement, HasConnection {
 	private PreparedStatementWrapper preparedStatementWrapper;
-	private CallableStatement parent;
 	
 	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, CallableStatement parent, String sql) throws SQLException {
 		this.wrapperFactory = wrapperFactory;

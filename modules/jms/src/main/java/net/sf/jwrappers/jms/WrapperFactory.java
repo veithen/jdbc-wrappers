@@ -23,6 +23,16 @@ import javax.jms.JMSException;
  * @version $Id$
  */
 public class WrapperFactory {
+    private boolean allowUnwrap;
+    
+    public synchronized boolean isAllowUnwrap() {
+        return allowUnwrap;
+    }
+
+    public synchronized void setAllowUnwrap(boolean allowUnwrap) {
+        this.allowUnwrap = allowUnwrap;
+    }
+
     protected ConnectionFactoryWrapper createConnectionFactoryWrapper() {
         return new ConnectionFactoryWrapper();
     }

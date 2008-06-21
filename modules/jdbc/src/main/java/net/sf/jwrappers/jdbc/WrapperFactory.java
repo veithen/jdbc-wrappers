@@ -30,6 +30,16 @@ import javax.sql.DataSource;
  * @version $Id$
  */
 public class WrapperFactory {
+    private boolean allowUnwrap;
+    
+    public synchronized boolean isAllowUnwrap() {
+        return allowUnwrap;
+    }
+
+    public synchronized void setAllowUnwrap(boolean allowUnwrap) {
+        this.allowUnwrap = allowUnwrap;
+    }
+
     protected DataSourceWrapper createDataSourceWrapper() {
         return new DataSourceWrapper();
     }
@@ -56,7 +66,7 @@ public class WrapperFactory {
 	
 	final DatabaseMetaDataWrapper wrapDatabaseMetaData(ConnectionWrapper connectionWrapper, DatabaseMetaData parent) throws SQLException {
 		DatabaseMetaDataWrapper wrapper = createDatabaseMetaDataWrapper();
-		wrapper.init(connectionWrapper, parent);
+		wrapper.init(this, connectionWrapper, parent);
 		return wrapper;
 	}
 	
@@ -96,7 +106,7 @@ public class WrapperFactory {
 	
 	final ResultSetWrapper wrapResultSet(ResultSetType resultSetType, Statement statementWrapper, ResultSet parent) throws SQLException {
 		ResultSetWrapper wrapper = createResultSetWrapper(resultSetType);
-		wrapper.init(statementWrapper, parent);
+		wrapper.init(this, statementWrapper, parent);
 		return wrapper;
 	}
 }

@@ -27,10 +27,8 @@ import java.sql.Statement;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class StatementWrapper extends AbstractWrapper implements Statement, HasConnection {
-	private WrapperFactory wrapperFactory;
+public class StatementWrapper extends AbstractWrapper<Statement> implements Statement, HasConnection {
 	private ConnectionWrapper connectionWrapper;
-	private Statement parent;
 	
 	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, Statement parent) throws SQLException {
 		this.wrapperFactory = wrapperFactory;

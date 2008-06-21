@@ -21,10 +21,7 @@ import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicSubscriber;
 
-public class SessionWrapper extends AbstractWrapper implements Session {
-    private WrapperFactory wrapperFactory;
-    private Session parent;
-    
+public class SessionWrapper extends AbstractWrapper<Session> implements Session {
     final void init(WrapperFactory wrapperFactory, Session parent) throws JMSException {
         this.wrapperFactory = wrapperFactory;
         this.parent = parent;

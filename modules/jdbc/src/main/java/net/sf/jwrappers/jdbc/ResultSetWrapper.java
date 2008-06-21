@@ -39,11 +39,11 @@ import java.util.Map;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
+public class ResultSetWrapper extends AbstractWrapper<ResultSet> implements ResultSet {
 	private Statement statementWrapper;
-	private ResultSet parent;
 	
-	final void init(Statement statementWrapper, ResultSet parent) throws SQLException {
+	final void init(WrapperFactory wrapperFactory, Statement statementWrapper, ResultSet parent) throws SQLException {
+	    this.wrapperFactory = wrapperFactory;
 		this.statementWrapper = statementWrapper;
 		this.parent = parent;
 		init();

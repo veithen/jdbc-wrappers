@@ -21,7 +21,10 @@ import javax.jms.JMSException;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class AbstractWrapper {
+public class AbstractWrapper<T> {
+    WrapperFactory wrapperFactory;
+    T parent;
+    
 	/**
 	 * Wrapper initialization method. This method is executed once before any
 	 * delegate method is called on the wrapper. Subclasses can override this
@@ -31,4 +34,12 @@ public class AbstractWrapper {
 	 */
 	protected void init() throws JMSException {
 	}
+    
+    public T unwrap() {
+        if (wrapperFactory.isAllowUnwrap()) {
+            return parent;
+        } else {
+            throw new IllegalStateException("unwrap not allowed");
+        }
+    }
 }

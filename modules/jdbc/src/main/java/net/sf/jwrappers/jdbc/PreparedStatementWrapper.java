@@ -39,10 +39,8 @@ import java.util.Calendar;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class PreparedStatementWrapper extends AbstractWrapper implements PreparedStatement, HasConnection {
-	private WrapperFactory wrapperFactory;
+public class PreparedStatementWrapper extends AbstractWrapper<PreparedStatement> implements PreparedStatement, HasConnection {
 	private StatementWrapper statementWrapper;
-	private PreparedStatement parent;
 	private String sql;
 	
 	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, PreparedStatement parent, String sql) throws SQLException {

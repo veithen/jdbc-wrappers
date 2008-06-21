@@ -33,10 +33,7 @@ import java.util.Map;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class ConnectionWrapper extends AbstractWrapper implements Connection {
-	private WrapperFactory wrapperFactory;
-	private Connection parent;
-	
+public class ConnectionWrapper extends AbstractWrapper<Connection> implements Connection {
 	final void init(WrapperFactory wrapperFactory, Connection parent) throws SQLException {
 		this.wrapperFactory = wrapperFactory;
 		this.parent = parent;

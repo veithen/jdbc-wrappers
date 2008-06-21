@@ -28,10 +28,7 @@ import javax.sql.DataSource;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class DataSourceWrapper extends AbstractWrapper implements DataSource {
-	private WrapperFactory wrapperFactory;
-	private DataSource parent;
-	
+public class DataSourceWrapper extends AbstractWrapper<DataSource> implements DataSource {
 	final void init(WrapperFactory wrapperFactory, DataSource parent) throws SQLException {
 		this.wrapperFactory = wrapperFactory;
 		this.parent = parent;

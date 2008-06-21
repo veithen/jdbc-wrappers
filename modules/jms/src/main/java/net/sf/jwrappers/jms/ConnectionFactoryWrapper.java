@@ -26,10 +26,7 @@ import javax.jms.JMSException;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class ConnectionFactoryWrapper extends AbstractWrapper implements ConnectionFactory {
-    private WrapperFactory wrapperFactory;
-    private ConnectionFactory parent;
-    
+public class ConnectionFactoryWrapper extends AbstractWrapper<ConnectionFactory> implements ConnectionFactory {
     final void init(WrapperFactory wrapperFactory, ConnectionFactory parent) throws JMSException {
         this.wrapperFactory = wrapperFactory;
         this.parent = parent;

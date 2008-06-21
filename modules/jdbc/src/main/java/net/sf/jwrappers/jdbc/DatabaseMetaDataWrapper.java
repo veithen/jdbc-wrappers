@@ -26,12 +26,12 @@ import java.sql.SQLException;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class DatabaseMetaDataWrapper extends AbstractWrapper implements DatabaseMetaData, HasConnection {
+public class DatabaseMetaDataWrapper extends AbstractWrapper<DatabaseMetaData> implements DatabaseMetaData, HasConnection {
 	private ConnectionWrapper connectionWrapper;
-	private DatabaseMetaData parent;
 	
-	final void init(ConnectionWrapper connectionWrapper, DatabaseMetaData parent) throws SQLException {
-		this.connectionWrapper = connectionWrapper;
+	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, DatabaseMetaData parent) throws SQLException {
+		this.wrapperFactory = wrapperFactory;
+	    this.connectionWrapper = connectionWrapper;
 		this.parent = parent;
 		init();
 	}
