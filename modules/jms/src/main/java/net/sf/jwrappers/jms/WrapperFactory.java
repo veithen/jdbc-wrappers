@@ -16,6 +16,7 @@ package net.sf.jwrappers.jms;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
+import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.Session;
 import javax.jms.TopicConnectionFactory;
@@ -55,6 +56,7 @@ public class WrapperFactory {
     public final QueueConnectionFactoryWrapper wrapQueueConnectionFactory(QueueConnectionFactory parent) throws JMSException {
         QueueConnectionFactoryWrapper wrapper = createQueueConnectionFactoryWrapper();
         wrapper.wrapperFactory = this;
+        wrapper.connectionFactoryWrapper = wrapConnectionFactory(parent);
         wrapper.parent = parent;
         wrapper.init();
         return wrapper;
@@ -67,6 +69,7 @@ public class WrapperFactory {
     public final TopicConnectionFactoryWrapper wrapTopicConnectionFactory(TopicConnectionFactory parent) throws JMSException {
         TopicConnectionFactoryWrapper wrapper = createTopicConnectionFactoryWrapper();
         wrapper.wrapperFactory = this;
+        wrapper.connectionFactoryWrapper = wrapConnectionFactory(parent);
         wrapper.parent = parent;
         wrapper.init();
         return wrapper;
@@ -78,6 +81,18 @@ public class WrapperFactory {
     
     public final ConnectionWrapper wrapConnection(Connection parent) throws JMSException {
         ConnectionWrapper wrapper = createConnectionWrapper();
+        wrapper.wrapperFactory = this;
+        wrapper.parent = parent;
+        wrapper.init();
+        return wrapper;
+    }
+    
+    protected QueueConnectionWrapper createQueueConnectionWrapper() {
+        return new QueueConnectionWrapper();
+    }
+    
+    public final QueueConnectionWrapper wrapQueueConnection(QueueConnection parent) throws JMSException {
+        QueueConnectionWrapper wrapper = createQueueConnectionWrapper();
         wrapper.wrapperFactory = this;
         wrapper.parent = parent;
         wrapper.init();
