@@ -1,4 +1,4 @@
-package net.sf.jdbcwrappers;
+package net.sf.jwrappers.jdbc;
 
 import java.sql.Connection;
 import java.sql.SQLException;

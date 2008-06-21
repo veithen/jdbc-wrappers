@@ -1,4 +1,4 @@
-package net.sf.jdbcwrappers;
+package net.sf.jwrappers.jdbc;
 
 public enum ResultSetType {
 	QUERY, KEYS

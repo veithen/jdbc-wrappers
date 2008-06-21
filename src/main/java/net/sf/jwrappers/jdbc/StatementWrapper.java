@@ -11,7 +11,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package net.sf.jdbcwrappers;
+package net.sf.jwrappers.jdbc;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

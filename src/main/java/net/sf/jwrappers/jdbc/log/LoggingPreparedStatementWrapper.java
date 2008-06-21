@@ -1,9 +1,9 @@
-package net.sf.jdbcwrappers.log;
+package net.sf.jwrappers.jdbc.log;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import net.sf.jdbcwrappers.PreparedStatementWrapper;
+import net.sf.jwrappers.jdbc.PreparedStatementWrapper;
 
 public class LoggingPreparedStatementWrapper extends PreparedStatementWrapper {
 	private final Logger logger;

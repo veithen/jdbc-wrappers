@@ -1,8 +1,8 @@
-package net.sf.jdbcwrappers.trim;
+package net.sf.jwrappers.jdbc.trim;
 
-import net.sf.jdbcwrappers.ResultSetType;
-import net.sf.jdbcwrappers.ResultSetWrapper;
-import net.sf.jdbcwrappers.WrapperFactory;
+import net.sf.jwrappers.jdbc.ResultSetType;
+import net.sf.jwrappers.jdbc.ResultSetWrapper;
+import net.sf.jwrappers.jdbc.WrapperFactory;
 
 public class TrimmingWrapperFactory extends WrapperFactory {
 	@Override

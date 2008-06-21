@@ -1,4 +1,4 @@
-package net.sf.jdbcwrappers.trim;
+package net.sf.jwrappers.jdbc.trim;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +14,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import net.sf.jdbcwrappers.DataSourceWrapper;
+import net.sf.jwrappers.jdbc.DataSourceWrapper;
+import net.sf.jwrappers.jdbc.trim.TrimmingWrapperFactory;
 import net.sf.springderby.DeleteDatabaseAction;
 import net.sf.springderby.EmbeddedDataSourceFactory;
 import net.sf.springderby.ExecuteSqlScriptsAction;
@@ -46,7 +47,7 @@ public class TrimmingTest {
 		List<OnlineAction> afterCreationActions = new LinkedList<OnlineAction>();
 		{
 			ExecuteSqlScriptsAction action = new ExecuteSqlScriptsAction();
-			action.setScript(new ClassPathResource("/net/sf/jdbcwrappers/trim/schema.sql"));
+			action.setScript(new ClassPathResource("/net/sf/jwrappers/jdbc/trim/schema.sql"));
 			afterCreationActions.add(action);
 		}
 		{

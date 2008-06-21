@@ -1,10 +1,10 @@
-package net.sf.jdbcwrappers.nulltype;
+package net.sf.jwrappers.jdbc.nulltype;
 
 import java.sql.ParameterMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import net.sf.jdbcwrappers.PreparedStatementWrapper;
+import net.sf.jwrappers.jdbc.PreparedStatementWrapper;
 
 public class NullTypePreparedStatementWrapper extends PreparedStatementWrapper {
 	@Override

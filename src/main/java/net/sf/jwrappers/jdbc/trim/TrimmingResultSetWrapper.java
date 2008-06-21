@@ -11,7 +11,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package net.sf.jdbcwrappers.trim;
+package net.sf.jwrappers.jdbc.trim;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -19,7 +19,7 @@ import java.sql.Types;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.jdbcwrappers.ResultSetWrapper;
+import net.sf.jwrappers.jdbc.ResultSetWrapper;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

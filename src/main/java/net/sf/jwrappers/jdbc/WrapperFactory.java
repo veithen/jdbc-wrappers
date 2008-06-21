@@ -1,4 +1,4 @@
-package net.sf.jdbcwrappers;
+package net.sf.jwrappers.jdbc;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;

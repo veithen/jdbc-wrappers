@@ -1,4 +1,4 @@
-package net.sf.jdbcwrappers.nulltype;
+package net.sf.jwrappers.jdbc.nulltype;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,8 @@ import java.sql.Types;
 
 import javax.sql.DataSource;
 
-import net.sf.jdbcwrappers.DataSourceWrapper;
+import net.sf.jwrappers.jdbc.DataSourceWrapper;
+import net.sf.jwrappers.jdbc.nulltype.NullTypeWrapperFactory;
 import net.sf.springderby.DeleteDatabaseAction;
 import net.sf.springderby.EmbeddedDataSourceFactory;
 import net.sf.springderby.ExecuteSqlScriptsAction;
@@ -31,7 +32,7 @@ public class NullTypeTest {
 		factory.setCreate(true);
 		factory.setBeforeStartupAction(new DeleteDatabaseAction());
 		ExecuteSqlScriptsAction afterCreationAction = new ExecuteSqlScriptsAction();
-		afterCreationAction.setScript(new ClassPathResource("/net/sf/jdbcwrappers/nulltype/schema.sql"));
+		afterCreationAction.setScript(new ClassPathResource("/net/sf/jwrappers/jdbc/nulltype/schema.sql"));
 		factory.setAfterCreationAction(afterCreationAction);
 		factory.setAfterShutdownAction(new DeleteDatabaseAction());
 		factory.afterPropertiesSet();
