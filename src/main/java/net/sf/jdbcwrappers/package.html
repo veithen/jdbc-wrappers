@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+</head>
+<body>
+Provides base classes to construct JDBC wrappers.
+<h2>What are JDBC wrappers?</h2>
+<p>
+JDBC wrappers use the well known proxy pattern to intercept calls to the
+JDBC layer. They are useful in situations where you need to alter the behavior
+of the JDBC layer or when you need to guarantee that whenever a given JDBC method
+or set of JDBC methods is called in your program, some action is triggered. A
+very basic use case is to log all SQL statements executed via JDBC.
+When carefully designed, JDBC wrappers can also be used to transparently compensate for
+subtle differences in behavior between database systems or JDBC drivers. This
+problem mainly arises when migrating an existing application to a new database
+engine. Examples include:
+</p>
+<ul>
+  <li>While with most databases, the semantics of {@link java.sql.ResultSet#getString(int)}
+      are identical for <tt>CHAR</tt> and <tt>VARCHAR</tt> columns, DB2 and Derby pad values
+      of <tt>CHAR</tt> columns to the declared maximum length.</li>
+  <li>Some databases support {@link java.sql.Types#NULL} as argument in calls
+      to {@link java.sql.PreparedStatement#setNull(int, int)}, while others don't.</li>
+  <li>...</li>
+</ul>
+<p>
+
+</p>
+
+-- layer between JDBC and some framework
+
+It is composed by a set of proxy classes that implement the
+standard JDBC interfaces such as {@link java.sql.Connection} or {@link java.sql.Statement}.
+In general, most of the methods in these proxies will simply delegate to the target ("real") JDBC
+objects, while some of the methods will add some new behavior.
+While the proxy pattern is in principle straightforward, when applying it to JDBC the following
+difficulties have to be faced:
+
+<ul>
+  <li>Large number of methods</li>
+  <li>Only control on DataSource or Connection</li>
+  <li>methods that create other JDBC objects</li>
+  <li>Statement -> PreparedStatement -> CallableStatement</li>
+</ul>
+
+</body>
+</html>
