@@ -58,7 +58,7 @@ public class TrimmingTest {
 		factory.setAfterCreationActions(afterCreationActions);
 		factory.setAfterShutdownAction(new DeleteDatabaseAction());
 		factory.afterPropertiesSet();
-		dataSource = new DataSourceWrapper(new TrimmingWrapperFactory(), (DataSource)factory.getObject());
+		dataSource = new TrimmingWrapperFactory().wrapDataSource((DataSource)factory.getObject());
 	}
 	
 	@AfterClass

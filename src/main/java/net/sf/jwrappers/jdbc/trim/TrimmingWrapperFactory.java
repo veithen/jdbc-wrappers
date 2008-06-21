@@ -6,7 +6,7 @@ import net.sf.jwrappers.jdbc.WrapperFactory;
 
 public class TrimmingWrapperFactory extends WrapperFactory {
 	@Override
-	public ResultSetWrapper createResultSetWrapper(ResultSetType resultSetType) {
+	protected ResultSetWrapper createResultSetWrapper(ResultSetType resultSetType) {
 		return resultSetType == ResultSetType.QUERY ? new TrimmingResultSetWrapper() : super.createResultSetWrapper(resultSetType);
 	}
 }

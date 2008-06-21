@@ -5,7 +5,7 @@ import net.sf.jwrappers.jdbc.WrapperFactory;
 
 public class NullTypeWrapperFactory extends WrapperFactory {
 	@Override
-	public PreparedStatementWrapper createPreparedStatementWrapper() {
+	protected PreparedStatementWrapper createPreparedStatementWrapper() {
 		return new NullTypePreparedStatementWrapper();
 	}
 }

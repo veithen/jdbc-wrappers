@@ -27,17 +27,17 @@ public class LoggingWrapperFactory extends WrapperFactory {
 	}
 
 	@Override
-	public ConnectionWrapper createConnectionWrapper() {
+	protected ConnectionWrapper createConnectionWrapper() {
 		return new LoggingConnectionWrapper(logger, getConfiguration());
 	}
 
 	@Override
-	public StatementWrapper createStatementWrapper() {
+	protected StatementWrapper createStatementWrapper() {
 		return new LoggingStatementWrapper(logger, getConfiguration());
 	}
 
 	@Override
-	public PreparedStatementWrapper createPreparedStatementWrapper() {
+	protected PreparedStatementWrapper createPreparedStatementWrapper() {
 		return new LoggingPreparedStatementWrapper(logger, getConfiguration());
 	}
 }

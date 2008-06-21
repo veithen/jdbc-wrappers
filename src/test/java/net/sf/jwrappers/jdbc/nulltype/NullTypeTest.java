@@ -7,7 +7,6 @@ import java.sql.Types;
 
 import javax.sql.DataSource;
 
-import net.sf.jwrappers.jdbc.DataSourceWrapper;
 import net.sf.jwrappers.jdbc.nulltype.NullTypeWrapperFactory;
 import net.sf.springderby.DeleteDatabaseAction;
 import net.sf.springderby.EmbeddedDataSourceFactory;
@@ -37,7 +36,7 @@ public class NullTypeTest {
 		factory.setAfterShutdownAction(new DeleteDatabaseAction());
 		factory.afterPropertiesSet();
 		rawDataSource = (EmbeddedDataSource)factory.getObject();
-		dataSource = new DataSourceWrapper(new NullTypeWrapperFactory(), rawDataSource);
+		dataSource = new NullTypeWrapperFactory().wrapDataSource(rawDataSource);
 	}
 	
 	@AfterClass
