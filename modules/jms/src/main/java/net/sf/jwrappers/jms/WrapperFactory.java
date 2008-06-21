@@ -16,6 +16,9 @@ package net.sf.jwrappers.jms;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.Session;
+import javax.jms.TopicConnectionFactory;
 
 /**
  * 
@@ -37,8 +40,28 @@ public class WrapperFactory {
         return new ConnectionFactoryWrapper();
     }
     
-    public ConnectionFactoryWrapper wrapConnectionFactory(ConnectionFactory parent) throws JMSException {
-        ConnectionFactoryWrapper wrapper = new ConnectionFactoryWrapper();
+    public final ConnectionFactoryWrapper wrapConnectionFactory(ConnectionFactory parent) throws JMSException {
+        ConnectionFactoryWrapper wrapper = createConnectionFactoryWrapper();
+        wrapper.init(this, parent);
+        return wrapper;
+    }
+    
+    protected QueueConnectionFactoryWrapper createQueueConnectionFactoryWrapper() {
+        return new QueueConnectionFactoryWrapper();
+    }
+    
+    public final QueueConnectionFactoryWrapper wrapQueueConnectionFactory(QueueConnectionFactory parent) throws JMSException {
+        QueueConnectionFactoryWrapper wrapper = createQueueConnectionFactoryWrapper();
+        wrapper.init(this, parent);
+        return wrapper;
+    }
+    
+    protected TopicConnectionFactoryWrapper createTopicConnectionFactoryWrapper() {
+        return new TopicConnectionFactoryWrapper();
+    }
+    
+    public final TopicConnectionFactoryWrapper wrapTopicConnectionFactory(TopicConnectionFactory parent) throws JMSException {
+        TopicConnectionFactoryWrapper wrapper = createTopicConnectionFactoryWrapper();
         wrapper.init(this, parent);
         return wrapper;
     }
@@ -47,13 +70,20 @@ public class WrapperFactory {
         return new ConnectionWrapper();
     }
     
-    public ConnectionWrapper wrapConnection(Connection parent) throws JMSException {
-        ConnectionWrapper wrapper = new ConnectionWrapper();
+    public final ConnectionWrapper wrapConnection(Connection parent) throws JMSException {
+        ConnectionWrapper wrapper = createConnectionWrapper();
         wrapper.init(this, parent);
         return wrapper;
     }
     
     protected SessionWrapper createSessionWrapper() {
         return new SessionWrapper();
+    }
+    
+    // TODO: public?
+    final SessionWrapper wrapSession(Session parent) throws JMSException {
+        SessionWrapper wrapper = createSessionWrapper();
+        wrapper.init(this, parent);
+        return wrapper;
     }
 }

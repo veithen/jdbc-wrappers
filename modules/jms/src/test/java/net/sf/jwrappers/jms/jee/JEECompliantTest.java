@@ -1,7 +1,6 @@
 package net.sf.jwrappers.jms.jee;
 
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -24,7 +23,9 @@ import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockConnectionFactory;
+import com.mockrunner.mock.jms.MockQueueConnectionFactory;
 import com.mockrunner.mock.jms.MockServerSessionPool;
+import com.mockrunner.mock.jms.MockTopicConnectionFactory;
 
 public class JEECompliantTest {
     private static final MessageListener noopMessageListener = new MessageListener() {
@@ -53,10 +54,10 @@ public class JEECompliantTest {
         queue = destinationManager.createQueue("test");
         topic = destinationManager.createTopic("test");
         ConfigurationManager configurationManager = new ConfigurationManager();
-        MockConnectionFactory cf = new MockConnectionFactory(destinationManager, configurationManager);
         WrapperFactory wrapperFactory = new JEECompliantWrapperFactory(false);
-        ConnectionFactory wrapper = wrapperFactory.wrapConnectionFactory(cf);
-        connection = wrapper.createConnection();
+        queueConnection = wrapperFactory.wrapQueueConnectionFactory(new MockQueueConnectionFactory(destinationManager, configurationManager)).createQueueConnection();
+        topicConnection = wrapperFactory.wrapTopicConnectionFactory(new MockTopicConnectionFactory(destinationManager, configurationManager)).createTopicConnection();
+        connection = wrapperFactory.wrapConnectionFactory(new MockConnectionFactory(destinationManager, configurationManager)).createConnection();
         session = connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
         wrapperFactory.setAllowUnwrap(true);
         sessionPool = new MockServerSessionPool((MockConnection)((ConnectionWrapper)connection).unwrap());

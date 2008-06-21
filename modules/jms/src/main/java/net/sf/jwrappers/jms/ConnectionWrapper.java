@@ -29,8 +29,15 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
         return parent.createDurableConnectionConsumer(topic, subscriptionName, messageSelector, sessionPool, maxMessages);
     }
 
+    /**
+     * Delegate method for {@link Connection#createSession(boolean, int)}.
+     * This method wraps the {@link Session} object using
+     * {@link WrapperFactory#wrapSession(Session)}.
+     * 
+     * {@inheritDoc}
+     */
     public Session createSession(boolean transacted, int acknowledgeMode) throws JMSException {
-        return parent.createSession(transacted, acknowledgeMode);
+        return wrapperFactory.wrapSession(parent.createSession(transacted, acknowledgeMode));
     }
 
     /**
