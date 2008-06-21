@@ -27,12 +27,6 @@ import javax.jms.JMSException;
  * @version $Id$
  */
 public class ConnectionFactoryWrapper extends AbstractWrapper<ConnectionFactory> implements ConnectionFactory {
-    final void init(WrapperFactory wrapperFactory, ConnectionFactory parent) throws JMSException {
-        this.wrapperFactory = wrapperFactory;
-        this.parent = parent;
-        init();
-    }
-    
     /**
      * Delegate method for {@link ConnectionFactory#createConnection()}.
      * This method wraps the {@link Connection} object using

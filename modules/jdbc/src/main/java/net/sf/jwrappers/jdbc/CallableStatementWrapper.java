@@ -23,14 +23,7 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class CallableStatementWrapper extends AbstractWrapper<CallableStatement> implements CallableStatement, HasConnection {
-	private PreparedStatementWrapper preparedStatementWrapper;
-	
-	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, CallableStatement parent, String sql) throws SQLException {
-		this.wrapperFactory = wrapperFactory;
-		preparedStatementWrapper = wrapperFactory.wrapPreparedStatement(connectionWrapper, parent, sql);
-		this.parent = parent;
-		init();
-	}
+	PreparedStatementWrapper preparedStatementWrapper;
 	
 	/**
 	 * Get the SQL statement used to construct the {@link PreparedStatement} object. 

@@ -27,14 +27,7 @@ import java.sql.SQLException;
  * @version $Id$
  */
 public class DatabaseMetaDataWrapper extends AbstractWrapper<DatabaseMetaData> implements DatabaseMetaData, HasConnection {
-	private ConnectionWrapper connectionWrapper;
-	
-	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, DatabaseMetaData parent) throws SQLException {
-		this.wrapperFactory = wrapperFactory;
-	    this.connectionWrapper = connectionWrapper;
-		this.parent = parent;
-		init();
-	}
+	ConnectionWrapper connectionWrapper;
 	
 	/**
 	 * Delegate method for {@link DatabaseMetaData#allProceduresAreCallable()}.

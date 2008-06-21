@@ -28,14 +28,7 @@ import java.sql.Statement;
  * @version $Id$
  */
 public class StatementWrapper extends AbstractWrapper<Statement> implements Statement, HasConnection {
-	private ConnectionWrapper connectionWrapper;
-	
-	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, Statement parent) throws SQLException {
-		this.wrapperFactory = wrapperFactory;
-		this.connectionWrapper = connectionWrapper;
-		this.parent = parent;
-		init();
-	}
+	ConnectionWrapper connectionWrapper;
 	
 	/**
 	 * Delegate method for {@link Statement#addBatch(String)}.

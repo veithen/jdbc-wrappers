@@ -40,16 +40,8 @@ import java.util.Calendar;
  * @version $Id$
  */
 public class PreparedStatementWrapper extends AbstractWrapper<PreparedStatement> implements PreparedStatement, HasConnection {
-	private StatementWrapper statementWrapper;
-	private String sql;
-	
-	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, PreparedStatement parent, String sql) throws SQLException {
-		this.wrapperFactory = wrapperFactory;
-		statementWrapper = wrapperFactory.wrapStatement(connectionWrapper, parent);
-		this.parent = parent;
-		this.sql = sql;
-		init();
-	}
+	StatementWrapper statementWrapper;
+	String sql;
 	
 	/**
 	 * Get the SQL statement used to construct the {@link PreparedStatement} object. 

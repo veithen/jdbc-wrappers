@@ -40,14 +40,7 @@ import java.util.Map;
  * @version $Id$
  */
 public class ResultSetWrapper extends AbstractWrapper<ResultSet> implements ResultSet {
-	private Statement statementWrapper;
-	
-	final void init(WrapperFactory wrapperFactory, Statement statementWrapper, ResultSet parent) throws SQLException {
-	    this.wrapperFactory = wrapperFactory;
-		this.statementWrapper = statementWrapper;
-		this.parent = parent;
-		init();
-	}
+	Statement statementWrapper;
 	
 	/**
 	 * Delegate method for {@link ResultSet#absolute(int)}.

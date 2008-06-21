@@ -42,7 +42,9 @@ public class WrapperFactory {
     
     public final ConnectionFactoryWrapper wrapConnectionFactory(ConnectionFactory parent) throws JMSException {
         ConnectionFactoryWrapper wrapper = createConnectionFactoryWrapper();
-        wrapper.init(this, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.parent = parent;
+        wrapper.init();
         return wrapper;
     }
     
@@ -52,7 +54,9 @@ public class WrapperFactory {
     
     public final QueueConnectionFactoryWrapper wrapQueueConnectionFactory(QueueConnectionFactory parent) throws JMSException {
         QueueConnectionFactoryWrapper wrapper = createQueueConnectionFactoryWrapper();
-        wrapper.init(this, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.parent = parent;
+        wrapper.init();
         return wrapper;
     }
     
@@ -62,7 +66,9 @@ public class WrapperFactory {
     
     public final TopicConnectionFactoryWrapper wrapTopicConnectionFactory(TopicConnectionFactory parent) throws JMSException {
         TopicConnectionFactoryWrapper wrapper = createTopicConnectionFactoryWrapper();
-        wrapper.init(this, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.parent = parent;
+        wrapper.init();
         return wrapper;
     }
     
@@ -72,7 +78,9 @@ public class WrapperFactory {
     
     public final ConnectionWrapper wrapConnection(Connection parent) throws JMSException {
         ConnectionWrapper wrapper = createConnectionWrapper();
-        wrapper.init(this, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.parent = parent;
+        wrapper.init();
         return wrapper;
     }
     
@@ -83,7 +91,9 @@ public class WrapperFactory {
     // TODO: public?
     final SessionWrapper wrapSession(Session parent) throws JMSException {
         SessionWrapper wrapper = createSessionWrapper();
-        wrapper.init(this, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.parent = parent;
+        wrapper.init();
         return wrapper;
     }
 }

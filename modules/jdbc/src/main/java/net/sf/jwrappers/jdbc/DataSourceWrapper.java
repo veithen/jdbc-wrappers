@@ -29,12 +29,6 @@ import javax.sql.DataSource;
  * @version $Id$
  */
 public class DataSourceWrapper extends AbstractWrapper<DataSource> implements DataSource {
-	final void init(WrapperFactory wrapperFactory, DataSource parent) throws SQLException {
-		this.wrapperFactory = wrapperFactory;
-		this.parent = parent;
-		init();
-	}
-
     /**
      * Delegate method for {@link DataSource#getConnection()}.
      * This method wraps the {@link Connection} object using

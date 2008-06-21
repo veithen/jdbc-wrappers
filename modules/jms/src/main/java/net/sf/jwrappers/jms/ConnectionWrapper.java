@@ -11,12 +11,6 @@ import javax.jms.Session;
 import javax.jms.Topic;
 
 public class ConnectionWrapper extends AbstractWrapper<Connection> implements Connection {
-    final void init(WrapperFactory wrapperFactory, Connection parent) throws JMSException {
-        this.wrapperFactory = wrapperFactory;
-        this.parent = parent;
-        init();
-    }
-
     public void close() throws JMSException {
         parent.close();
     }

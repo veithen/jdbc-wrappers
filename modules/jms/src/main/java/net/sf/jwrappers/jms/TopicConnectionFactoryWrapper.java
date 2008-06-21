@@ -6,11 +6,6 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicConnectionFactory;
 
 public class TopicConnectionFactoryWrapper extends AbstractWrapper<TopicConnectionFactory> implements TopicConnectionFactory {
-    final void init(WrapperFactory wrapperFactory, TopicConnectionFactory parent) {
-        this.wrapperFactory = wrapperFactory;
-        this.parent = parent;
-    }
-    
     public Connection createConnection() throws JMSException {
         return parent.createConnection();
     }

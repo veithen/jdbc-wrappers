@@ -6,11 +6,6 @@ import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
 
 public class QueueConnectionFactoryWrapper extends AbstractWrapper<QueueConnectionFactory> implements QueueConnectionFactory {
-    final void init(WrapperFactory wrapperFactory, QueueConnectionFactory parent) {
-        this.wrapperFactory = wrapperFactory;
-        this.parent = parent;
-    }
-    
     public Connection createConnection() throws JMSException {
         return parent.createConnection();
     }

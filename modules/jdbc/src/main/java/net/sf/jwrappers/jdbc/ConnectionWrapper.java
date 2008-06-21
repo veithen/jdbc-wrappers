@@ -34,12 +34,6 @@ import java.util.Map;
  * @version $Id$
  */
 public class ConnectionWrapper extends AbstractWrapper<Connection> implements Connection {
-	final void init(WrapperFactory wrapperFactory, Connection parent) throws SQLException {
-		this.wrapperFactory = wrapperFactory;
-		this.parent = parent;
-		init();
-	}
-	
 	/**
 	 * Delegate method for {@link Connection#clearWarnings()}.
 	 * 

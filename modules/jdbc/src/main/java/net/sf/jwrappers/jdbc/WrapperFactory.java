@@ -46,7 +46,9 @@ public class WrapperFactory {
     
     public DataSourceWrapper wrapDataSource(DataSource parent) throws SQLException {
         DataSourceWrapper wrapper = createDataSourceWrapper();
-        wrapper.init(this, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.parent = parent;
+        wrapper.init();
         return wrapper;
     }
     
@@ -56,7 +58,9 @@ public class WrapperFactory {
 	
 	public final ConnectionWrapper wrapConnection(Connection parent) throws SQLException {
 		ConnectionWrapper wrapper = createConnectionWrapper();
-		wrapper.init(this, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.parent = parent;
+        wrapper.init();
 		return wrapper;
 	}
 	
@@ -66,7 +70,10 @@ public class WrapperFactory {
 	
 	final DatabaseMetaDataWrapper wrapDatabaseMetaData(ConnectionWrapper connectionWrapper, DatabaseMetaData parent) throws SQLException {
 		DatabaseMetaDataWrapper wrapper = createDatabaseMetaDataWrapper();
-		wrapper.init(this, connectionWrapper, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.connectionWrapper = connectionWrapper;
+        wrapper.parent = parent;
+        wrapper.init();
 		return wrapper;
 	}
 	
@@ -76,7 +83,10 @@ public class WrapperFactory {
 	
 	final StatementWrapper wrapStatement(ConnectionWrapper connectionWrapper, Statement parent) throws SQLException {
 		StatementWrapper wrapper = createStatementWrapper();
-		wrapper.init(this, connectionWrapper, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.connectionWrapper = connectionWrapper;
+        wrapper.parent = parent;
+        wrapper.init();
 		return wrapper;
 	}
 	
@@ -86,7 +96,11 @@ public class WrapperFactory {
 	
 	final PreparedStatementWrapper wrapPreparedStatement(ConnectionWrapper connectionWrapper, PreparedStatement parent, String sql) throws SQLException {
 		PreparedStatementWrapper wrapper = createPreparedStatementWrapper();
-		wrapper.init(this, connectionWrapper, parent, sql);
+        wrapper.wrapperFactory = this;
+        wrapper.statementWrapper = wrapStatement(connectionWrapper, parent);
+        wrapper.parent = parent;
+        wrapper.sql = sql;
+        wrapper.init();
 		return wrapper;
 	}
 	
@@ -96,7 +110,10 @@ public class WrapperFactory {
 	
 	final CallableStatementWrapper wrapCallableStatement(ConnectionWrapper connectionWrapper, CallableStatement parent, String sql) throws SQLException {
 		CallableStatementWrapper wrapper = createCallableStatementWrapper();
-		wrapper.init(this, connectionWrapper, parent, sql);
+        wrapper.wrapperFactory = this;
+        wrapper.preparedStatementWrapper = wrapPreparedStatement(connectionWrapper, parent, sql);
+        wrapper.parent = parent;
+        wrapper.init();
 		return wrapper;
 	}
 	
@@ -106,7 +123,10 @@ public class WrapperFactory {
 	
 	final ResultSetWrapper wrapResultSet(ResultSetType resultSetType, Statement statementWrapper, ResultSet parent) throws SQLException {
 		ResultSetWrapper wrapper = createResultSetWrapper(resultSetType);
-		wrapper.init(this, statementWrapper, parent);
+        wrapper.wrapperFactory = this;
+        wrapper.statementWrapper = statementWrapper;
+        wrapper.parent = parent;
+        wrapper.init();
 		return wrapper;
 	}
 }
