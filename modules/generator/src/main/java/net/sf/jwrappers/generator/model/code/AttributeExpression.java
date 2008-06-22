@@ -3,7 +3,7 @@ package net.sf.jwrappers.generator.model.code;
 import net.sf.jwrappers.generator.model.Attribute;
 import net.sf.jwrappers.generator.model.Imports;
 
-public class AttributeExpression implements Expression {
+public class AttributeExpression implements LValue {
     private final Expression object;
     private final Attribute attribute;
     

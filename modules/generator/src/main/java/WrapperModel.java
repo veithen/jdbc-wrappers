@@ -2,15 +2,25 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import net.sf.jwrappers.generator.Access;
 import net.sf.jwrappers.generator.MClassType;
+import net.sf.jwrappers.generator.MType;
+import net.sf.jwrappers.generator.model.Argument;
 import net.sf.jwrappers.generator.model.Attribute;
 import net.sf.jwrappers.generator.model.ClassModel;
 import net.sf.jwrappers.generator.model.ClassName;
+import net.sf.jwrappers.generator.model.CodeModel;
 import net.sf.jwrappers.generator.model.MethodModel;
 import net.sf.jwrappers.generator.model.Model;
+import net.sf.jwrappers.generator.model.code.ArgumentExpression;
+import net.sf.jwrappers.generator.model.code.Assignment;
 import net.sf.jwrappers.generator.model.code.AttributeExpression;
 import net.sf.jwrappers.generator.model.code.Expression;
+import net.sf.jwrappers.generator.model.code.MethodInvocation;
+import net.sf.jwrappers.generator.model.code.NewExpression;
 import net.sf.jwrappers.generator.model.code.ReturnInstruction;
+import net.sf.jwrappers.generator.model.code.VariableDeclaration;
+import net.sf.jwrappers.generator.model.code.VariableExpression;
 
 public class WrapperModel {
     private final Model model = new Model();
@@ -60,9 +70,24 @@ public class WrapperModel {
             if (wrapperClass == null) {
                 return null;
             }
-            wrapMethod = getWrapperFactory().createMethod("wrap" + targetClassName.getUnqualifiedName());
-            wrapMethod.setReturnType(wrapperClass.getWrapperClassType());
-            wrapMethod.createArgument("parent", new MClassType(wrapperClass.getTargetClass()));
+            MType wrapperClassType = wrapperClass.getWrapperClassType();
+            ClassModel wrapperFactory = getWrapperFactory();
+            MethodModel createWrapperMethod = wrapperFactory.createMethod("create" + wrapperClass.getWrapperClass().getName().getUnqualifiedName());
+            createWrapperMethod.setAccess(Access.PROTECTED);
+            createWrapperMethod.setReturnType(wrapperClassType);
+            createWrapperMethod.getCode().addInstruction(new ReturnInstruction(new NewExpression(wrapperClassType)));
+            wrapMethod = wrapperFactory.createMethod("wrap" + targetClassName.getUnqualifiedName());
+            wrapMethod.setReturnType(wrapperClassType);
+            Argument targetArgument = wrapMethod.createArgument("parent", new MClassType(wrapperClass.getTargetClass()));
+            wrapMethod.addException(defaultException);
+            CodeModel code = wrapMethod.getCode();
+            VariableDeclaration wrapperVariableDeclaration = new VariableDeclaration(wrapperClassType, "wrapper", new MethodInvocation(Expression.SELF, createWrapperMethod));
+            code.addInstruction(wrapperVariableDeclaration);
+            VariableExpression wrapperVariable = new VariableExpression(wrapperVariableDeclaration);
+            code.addInstruction(new Assignment(new AttributeExpression(wrapperVariable, wrapperClass.getWrapperFactoryAttribute()), Expression.SELF));
+            code.addInstruction(new Assignment(new AttributeExpression(wrapperVariable, wrapperClass.getTargetAttribute()), new ArgumentExpression(targetArgument)));
+            code.addInstruction(new MethodInvocation(wrapperVariable, wrapperClass.getInitMethod()));
+            code.addInstruction(new ReturnInstruction(wrapperVariable));
             wrapMethods.put(targetClassName, wrapMethod);
         }
         return wrapMethod;
@@ -79,7 +104,8 @@ public class WrapperModel {
             isAllowUnwrapMethod.getCode().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, allowUnwrapAttribute)));
             MethodModel setAllowUnwrapMethod = wrapperFactory.createMethod("setAllowUnwrap");
             setAllowUnwrapMethod.setSynchonized(true);
-            setAllowUnwrapMethod.createArgument("allowUnwrap", model.importType(Boolean.TYPE));
+            Argument allowUnwrapArgument = setAllowUnwrapMethod.createArgument("allowUnwrap", model.importType(Boolean.TYPE));
+            setAllowUnwrapMethod.getCode().addInstruction(new Assignment(new AttributeExpression(Expression.SELF, allowUnwrapAttribute), new ArgumentExpression(allowUnwrapArgument)));
         }
         return wrapperFactory;
     }

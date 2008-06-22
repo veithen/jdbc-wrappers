@@ -25,6 +25,9 @@ public class WrapperClassModel {
     private final Model model;
     private final ClassModel targetClass;
     private ClassModel wrapperClass;
+    private Attribute wrapperFactoryAttribute;
+    private Attribute targetAttribute;
+    private MethodModel initMethod;
     
     public WrapperClassModel(WrapperModel wrapperModel, Class<?> iface) {
         this.wrapperModel = wrapperModel;
@@ -47,15 +50,40 @@ public class WrapperClassModel {
     public MType getWrapperClassType() {
         return new MClassType(getWrapperClass());
     }
+    
+    public Attribute getWrapperFactoryAttribute() {
+        if (wrapperFactoryAttribute == null) {
+            wrapperFactoryAttribute = wrapperClass.createAttribute(Access.PACKAGE, "wrapperFactory", new MClassType(wrapperModel.getWrapperFactory()));
+        }
+        return wrapperFactoryAttribute;
+    }
+    
+    public Attribute getTargetAttribute() {
+        if (targetAttribute == null) {
+            targetAttribute = wrapperClass.createAttribute(Access.PACKAGE, "parent", new MClassType(targetClass));
+        }
+        return targetAttribute;
+    }
+
+    public MethodModel getInitMethod() {
+        if (initMethod == null) {
+            initMethod = wrapperClass.createMethod("init");
+            initMethod.setAccess(Access.PROTECTED);
+            initMethod.addException(wrapperModel.getDefaultException());
+            JavadocModel javadoc = initMethod.getJavadoc();
+            javadoc.addText("Wrapper initialization method. This method is executed once before any\n");
+            javadoc.addText("delegate method is called on the wrapper. Subclasses can override this\n");
+            javadoc.addText("method to do initialization work. The default implementation does\n");
+            javadoc.addText("nothing.\n");
+            javadoc.addThrows(wrapperModel.getDefaultException(), wrapperModel.getDefaultExceptionDescription());
+        }
+        return initMethod;
+    }
 
     public void build() {
         ClassModel wrapperClass = getWrapperClass();
         
-        Attribute wrapperFactoryAttribute = wrapperClass.createAttribute(Access.PACKAGE, "wrapperFactory", new MClassType(wrapperModel.getWrapperFactory()));
-        Attribute targetAttribute = wrapperClass.createAttribute(Access.PACKAGE, "parent", new MClassType(targetClass));
-        
-        buildInitMethod();
-        buildUnwrapMethod(wrapperFactoryAttribute, targetAttribute);
+        buildUnwrapMethod();
         
         Expression targetExpression = new AttributeExpression(Expression.SELF, targetAttribute);
         List<MethodModel> targetMethods = new ArrayList<MethodModel>(targetClass.getMethods());
@@ -99,24 +127,12 @@ public class WrapperClassModel {
             javadoc.addText("{@inheritDoc}\n");
         }
     }
-
-    private void buildInitMethod() {
-        MethodModel initMethod = wrapperClass.createMethod("init");
-        initMethod.setAccess(Access.PROTECTED);
-        initMethod.addException(wrapperModel.getDefaultException());
-        JavadocModel javadoc = initMethod.getJavadoc();
-        javadoc.addText("Wrapper initialization method. This method is executed once before any\n");
-        javadoc.addText("delegate method is called on the wrapper. Subclasses can override this\n");
-        javadoc.addText("method to do initialization work. The default implementation does\n");
-        javadoc.addText("nothing.\n");
-        javadoc.addThrows(wrapperModel.getDefaultException(), wrapperModel.getDefaultExceptionDescription());
-    }
     
-    private void buildUnwrapMethod(Attribute wrapperFactoryAttribute, Attribute targetAttribute) {
+    private void buildUnwrapMethod() {
         MethodModel unwrapMethod = wrapperClass.createMethod("unwrap");
         unwrapMethod.setReturnType(new MClassType(targetClass));
-        IfStatement ifStatement = new IfStatement(new MethodInvocation(new AttributeExpression(Expression.SELF, wrapperFactoryAttribute), wrapperModel.getIsAllowUnwrapMethod()));
-        ifStatement.getIfClause().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, targetAttribute)));
+        IfStatement ifStatement = new IfStatement(new MethodInvocation(new AttributeExpression(Expression.SELF, getWrapperFactoryAttribute()), wrapperModel.getIsAllowUnwrapMethod()));
+        ifStatement.getIfClause().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, getTargetAttribute())));
         ifStatement.getElseClause().addInstruction(new SourceStatement("throw new IllegalStateException(\"unwrap not allowed\")"));
         unwrapMethod.getCode().addInstruction(ifStatement);
     }

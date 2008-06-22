@@ -61,6 +61,19 @@ public class WrapperFactory {
         return wrapper;
     }
 
+    protected StatementWrapper createStatementWrapper() {
+        return new StatementWrapper();
+    }
+
+    final StatementWrapper wrapStatement(ConnectionWrapper connectionWrapper, Statement parent) throws SQLException {
+        StatementWrapper wrapper = createStatementWrapper();
+        wrapper.wrapperFactory = this;
+        wrapper.connectionWrapper = connectionWrapper;
+        wrapper.parent = parent;
+        wrapper.init();
+        return wrapper;
+    }
+
     protected DatabaseMetaDataWrapper createDatabaseMetaDataWrapper() {
         return new DatabaseMetaDataWrapper();
     }
@@ -74,14 +87,14 @@ public class WrapperFactory {
         return wrapper;
     }
 
-    protected StatementWrapper createStatementWrapper() {
-        return new StatementWrapper();
+    protected CallableStatementWrapper createCallableStatementWrapper() {
+        return new CallableStatementWrapper();
     }
 
-    final StatementWrapper wrapStatement(ConnectionWrapper connectionWrapper, Statement parent) throws SQLException {
-        StatementWrapper wrapper = createStatementWrapper();
+    final CallableStatementWrapper wrapCallableStatement(ConnectionWrapper connectionWrapper, CallableStatement parent, String sql) throws SQLException {
+        CallableStatementWrapper wrapper = createCallableStatementWrapper();
         wrapper.wrapperFactory = this;
-        wrapper.connectionWrapper = connectionWrapper;
+        wrapper.preparedStatementWrapper = wrapPreparedStatement(connectionWrapper, parent, sql);
         wrapper.parent = parent;
         wrapper.init();
         return wrapper;
@@ -97,19 +110,6 @@ public class WrapperFactory {
         wrapper.statementWrapper = wrapStatement(connectionWrapper, parent);
         wrapper.parent = parent;
         wrapper.sql = sql;
-        wrapper.init();
-        return wrapper;
-    }
-
-    protected CallableStatementWrapper createCallableStatementWrapper() {
-        return new CallableStatementWrapper();
-    }
-
-    final CallableStatementWrapper wrapCallableStatement(ConnectionWrapper connectionWrapper, CallableStatement parent, String sql) throws SQLException {
-        CallableStatementWrapper wrapper = createCallableStatementWrapper();
-        wrapper.wrapperFactory = this;
-        wrapper.preparedStatementWrapper = wrapPreparedStatement(connectionWrapper, parent, sql);
-        wrapper.parent = parent;
         wrapper.init();
         return wrapper;
     }
