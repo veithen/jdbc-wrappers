@@ -1,63 +1,44 @@
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import net.sf.jwrappers.generator.MClassType;
-import net.sf.jwrappers.generator.MType;
-import net.sf.jwrappers.generator.Model;
-import net.sf.jwrappers.generator.model.Argument;
-import net.sf.jwrappers.generator.model.Attribute;
 import net.sf.jwrappers.generator.model.ClassModel;
 import net.sf.jwrappers.generator.model.ClassName;
-import net.sf.jwrappers.generator.model.MethodModel;
-import net.sf.jwrappers.generator.model.code.AttributeExpression;
-import net.sf.jwrappers.generator.model.code.Expression;
-import net.sf.jwrappers.generator.model.code.MethodInvocation;
-import net.sf.jwrappers.generator.model.code.ReturnInstruction;
 import net.sf.jwrappers.generator.writer.CharStreamCodeWriter;
 
 public class Test {
-    public static void main(String[] args) {
-        String packageName = "net.sf.jwrappers.jdbc";
+    public static void main(String[] args) throws IOException {
+        WrapperModel wrapperModel = new WrapperModel();
+        wrapperModel.setPackageName("net.sf.jwrappers.jdbc");
+        wrapperModel.setDefaultExceptionType(SQLException.class);
+        wrapperModel.addInterface(DataSource.class);
         
-        Model model = new Model();
-        MType defaultException = model.importType(SQLException.class);
+        wrapperModel.build();
         
-        ClassModel wrapperFactory = new ClassModel(new ClassName(packageName, "WrapperFactory"));
-        Attribute allowUnwrapAttribute = wrapperFactory.createAttribute("allowUnwrap", model.importType(Boolean.TYPE));
-        MethodModel isAllowUnwrapMethod = wrapperFactory.createMethod("isAllowUnwrap");
-        isAllowUnwrapMethod.getCode().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, allowUnwrapAttribute)));
-        
-        ClassModel targetClass = model.importClass(DataSource.class);
-        
-        ClassModel wrapperClass = new ClassModel(new ClassName(packageName, "DataSourceWrapper"));
-        wrapperClass.addInterface(new MClassType(targetClass));
-        Attribute wrapperFactoryAttribute = wrapperClass.createAttribute("wrapperFactory", new MClassType(wrapperFactory));
-        Attribute targetAttribute = wrapperClass.createAttribute("parent", new MClassType(targetClass));
-        
-        MethodModel initMethod = wrapperClass.createMethod("init");
-        initMethod.addException(defaultException);
-        
-        MethodModel unwrapMethod = wrapperClass.createMethod("unwrap");
-        unwrapMethod.setReturnType(new MClassType(targetClass));
-        
-        Expression targetExpression = new AttributeExpression(Expression.SELF, targetAttribute);
-        for (MethodModel targetMethod : targetClass.getMethods()) {
-            MethodModel method = wrapperClass.overrideMethod(targetMethod);
-            MethodInvocation invocation = new MethodInvocation(targetExpression, targetMethod);
-            for (Argument argument : method.getArguments()) {
-                invocation.addArgument(argument);
+        File outputDir = new File("out");
+        for (ClassModel classModel : wrapperModel.getModel().getClasses()) {
+            ClassName className = classModel.getName();
+            File dir = outputDir;
+            for (String packageNamePart : className.getPackageName().split("\\.")) {
+                dir = new File(dir, packageNamePart);
+                if (!dir.exists()) {
+                    dir.mkdir();
+                }
             }
-            if (method.getReturnType() != null) {
-                method.getCode().addInstruction(new ReturnInstruction(invocation));
-            } else {
-                method.getCode().addInstruction(invocation);
+            OutputStream out = new FileOutputStream(new File(dir, className.getUnqualifiedName() + ".java"));
+            try {
+                CharStreamCodeWriter codeWriter = new CharStreamCodeWriter(new OutputStreamWriter(out));
+                classModel.generate(codeWriter);
+                codeWriter.flush();
+            }
+            finally {
+                out.close();
             }
         }
-        
-        CharStreamCodeWriter codeWriter = new CharStreamCodeWriter(new OutputStreamWriter(System.out));
-        wrapperClass.generate(codeWriter);
-        codeWriter.flush();
     }
 }

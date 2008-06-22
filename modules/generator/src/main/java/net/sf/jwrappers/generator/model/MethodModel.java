@@ -4,10 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.sf.jwrappers.generator.MType;
+import net.sf.jwrappers.generator.model.javadoc.JavadocModel;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 import net.sf.jwrappers.generator.writer.IndentCodeWriter;
 
 public class MethodModel {
+    private final JavadocModel javadoc = new JavadocModel();
     private MType returnType;
 	private String name;
 	private final List<Argument> arguments = new LinkedList<Argument>();
@@ -18,7 +20,11 @@ public class MethodModel {
 		this.name = name;
 	}
 	
-	public MType getReturnType() {
+	public JavadocModel getJavadoc() {
+        return javadoc;
+    }
+
+    public MType getReturnType() {
         return returnType;
     }
 
@@ -73,6 +79,7 @@ public class MethodModel {
     }
     
 	public void generate(CodeWriter out, Imports imports) {
+	    javadoc.generate(out, imports);
 	    out.write("public ");
 	    if (returnType == null) {
 	        out.write("void");

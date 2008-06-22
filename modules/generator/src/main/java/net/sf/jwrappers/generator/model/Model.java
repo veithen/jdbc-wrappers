@@ -1,12 +1,26 @@
-package net.sf.jwrappers.generator;
+package net.sf.jwrappers.generator.model;
 
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 
-import net.sf.jwrappers.generator.model.ClassModel;
-import net.sf.jwrappers.generator.model.ClassName;
-import net.sf.jwrappers.generator.model.MethodModel;
+import net.sf.jwrappers.generator.MClassType;
+import net.sf.jwrappers.generator.MType;
+import net.sf.jwrappers.generator.PrimitiveType;
 
 public class Model {
+    private final List<ClassModel> classes = new LinkedList<ClassModel>();
+    
+    public List<ClassModel> getClasses() {
+        return classes;
+    }
+
+    public ClassModel createClass(ClassName name) {
+        ClassModel classModel = new ClassModel(name);
+        classes.add(classModel);
+        return classModel;
+    }
+    
 	public ClassModel importClass(Class<?> clazz) {
 		ClassModel classModel = new ClassModel(new ClassName(clazz.getName()));
 		for (Method method : clazz.getDeclaredMethods()) {

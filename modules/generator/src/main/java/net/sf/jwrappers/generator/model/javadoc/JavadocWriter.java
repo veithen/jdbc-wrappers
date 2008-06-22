@@ -1,17 +1,20 @@
-package net.sf.jwrappers.generator.writer;
+package net.sf.jwrappers.generator.model.javadoc;
 
-public class IndentCodeWriter extends CodeWriter {
+import net.sf.jwrappers.generator.writer.CodeWriter;
+
+public class JavadocWriter extends CodeWriter {
     private final CodeWriter parent;
     private boolean startOfLine = true;
 
-    public IndentCodeWriter(CodeWriter parent) {
+    public JavadocWriter(CodeWriter parent) {
         this.parent = parent;
+        parent.writeln("/**");
     }
 
     @Override
     public void write(String s) {
         if (startOfLine) {
-            parent.write("    ");
+            parent.write(" * ");
             parent.write(s);
             startOfLine = false;
         } else {
@@ -21,11 +24,11 @@ public class IndentCodeWriter extends CodeWriter {
 
     @Override
     public void writeln() {
-        // TODO: remove this later
-        if (startOfLine) {
-            parent.write("    ");
-        }
         parent.writeln();
         startOfLine = true;
+    }
+    
+    public void end() {
+        parent.writeln(" */");
     }
 }

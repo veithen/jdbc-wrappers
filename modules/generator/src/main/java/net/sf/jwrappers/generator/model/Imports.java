@@ -16,12 +16,22 @@ public class Imports {
         Pattern.compile("javax\\..*"),
     };
     
+    private final String packageName;
     private final Set<ClassName> classNames = new HashSet<ClassName>();
     
+    public Imports(String packageName) {
+        this.packageName = packageName;
+    }
+
     public void add(ClassName className) {
-        if (!className.getPackageName().equals("java.lang")) {
+        if (requiresQualification(className)) {
             classNames.add(className);
         }
+    }
+    
+    private boolean requiresQualification(ClassName className) {
+        String packageName = className.getPackageName();
+        return !packageName.equals("java.lang") && !packageName.equals(this.packageName);
     }
     
     public void generate(CodeWriter out) {
@@ -52,7 +62,7 @@ public class Imports {
     }
     
     public String format(ClassName className) {
-        return classNames.contains(className) || className.getPackageName().equals("java.lang")
+        return classNames.contains(className) || !requiresQualification(className)
                     ? className.getUnqualifiedName() : className.toString();
     }
 }

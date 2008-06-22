@@ -14,7 +14,7 @@ public class ClassModel {
 	private final List<Attribute> attributes = new LinkedList<Attribute>();
 	private final List<MethodModel> methods = new LinkedList<MethodModel>();
 	
-	public ClassModel(ClassName name) {
+	ClassModel(ClassName name) {
 		this.name = name;
 	}
 	
@@ -86,7 +86,7 @@ public class ClassModel {
 	}
 	
     public void generate(CodeWriter out) {
-        Imports imports = new Imports();
+        Imports imports = new Imports(name.getPackageName());
         collectImports(imports);
         out.write("package ");
         out.write(name.getPackageName());
