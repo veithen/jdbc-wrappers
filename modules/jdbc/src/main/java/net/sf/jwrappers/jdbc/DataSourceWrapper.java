@@ -24,9 +24,6 @@ import javax.sql.DataSource;
  * All methods delegate to the target {@link DataSource} object. Returned
  * {@link Connection} objects are wrapped using the {@link WrapperFactory}
  * object that created the {@link DataSourceWrapper}.
- * 
- * @author Andreas Veithen
- * @version $Id$
  */
 public class DataSourceWrapper implements DataSource {
     WrapperFactory wrapperFactory;

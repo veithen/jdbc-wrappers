@@ -1,15 +1,25 @@
 package net.sf.jwrappers.generator.model;
 
+import net.sf.jwrappers.generator.Access;
 import net.sf.jwrappers.generator.MType;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 
 public class Attribute {
+    private Access access = Access.PRIVATE;
     private String name;
     private MType type;
     
     Attribute(String name, MType type) {
         this.name = name;
         this.type = type;
+    }
+
+    public Access getAccess() {
+        return access;
+    }
+
+    public void setAccess(Access access) {
+        this.access = access;
     }
 
     public String getName() {
@@ -29,6 +39,10 @@ public class Attribute {
     }
 
     public void generate(CodeWriter out, Imports imports) {
+        if (access.hasIdentifier()) {
+            out.write(access.getIdentifier());
+            out.write(" ");
+        }
         out.write(type.toString(imports));
         out.write(" ");
         out.write(name);

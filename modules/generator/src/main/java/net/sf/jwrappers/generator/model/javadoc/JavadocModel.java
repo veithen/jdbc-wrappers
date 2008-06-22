@@ -71,7 +71,25 @@ public class JavadocModel {
         }
     }
     
+    private static class Throws implements Piece {
+        private final MClassType type;
+        private final String description;
+        
+        public Throws(MClassType type, String description) {
+            this.type = type;
+            this.description = description;
+        }
+
+        public void generate(JavadocWriter out, Imports imports) {
+            out.write("@throws ");
+            out.write(type.toString(imports));
+            out.write(" ");
+            out.writeln(description);
+        }
+    }
+    
     private final List<Piece> pieces = new LinkedList<Piece>();
+    private final List<Throws> throwsTags = new LinkedList<Throws>();
     
     public void addText(String text) {
         pieces.add(new TextPiece(text));
@@ -85,10 +103,17 @@ public class JavadocModel {
         pieces.add(new MethodLink(method));
     }
     
+    public void addThrows(MClassType type, String description) {
+        throwsTags.add(new Throws(type, description));
+    }
+    
     public void generate(CodeWriter codeWriter, Imports imports) {
-        if (!pieces.isEmpty()) {
+        List<Piece> allPieces = new LinkedList<Piece>();
+        allPieces.addAll(pieces);
+        allPieces.addAll(throwsTags);
+        if (!allPieces.isEmpty()) {
             JavadocWriter out = new JavadocWriter(codeWriter);
-            for (Piece piece : pieces) {
+            for (Piece piece : allPieces) {
                 piece.generate(out, imports);
             }
             out.end();

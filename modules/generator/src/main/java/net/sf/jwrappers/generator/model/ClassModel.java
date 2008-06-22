@@ -3,11 +3,14 @@ package net.sf.jwrappers.generator.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.sf.jwrappers.generator.Access;
 import net.sf.jwrappers.generator.MType;
+import net.sf.jwrappers.generator.model.javadoc.JavadocModel;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 import net.sf.jwrappers.generator.writer.IndentCodeWriter;
 
 public class ClassModel {
+    private final JavadocModel javadoc = new JavadocModel();
 	private ClassName name;
 	private MType superClass;
 	private final List<MType> interfaces = new LinkedList<MType>();
@@ -18,7 +21,11 @@ public class ClassModel {
 		this.name = name;
 	}
 	
-	public ClassName getName() {
+	public JavadocModel getJavadoc() {
+        return javadoc;
+    }
+
+    public ClassName getName() {
         return name;
     }
 
@@ -48,6 +55,13 @@ public class ClassModel {
 	    return attribute;
 	}
 	
+    public Attribute createAttribute(Access access, String name, MType type) {
+        Attribute attribute = new Attribute(name, type);
+        attribute.setAccess(access);
+        attributes.add(attribute);
+        return attribute;
+    }
+    
 	public MethodModel createMethod(String name) {
 	    MethodModel method = new MethodModel(this, name);
 	    methods.add(method);
@@ -93,6 +107,7 @@ public class ClassModel {
         out.writeln(";");
         out.writeln();
         imports.generate(out);
+        javadoc.generate(out, imports);
         out.write("public class ");
         out.write(name.getUnqualifiedName());
         if (superClass != null) {

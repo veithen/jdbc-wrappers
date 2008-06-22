@@ -29,6 +29,9 @@ public class JavadocWriter extends CodeWriter {
     }
     
     public void end() {
+        if (!startOfLine) {
+            parent.writeln();
+        }
         parent.writeln(" */");
     }
 }

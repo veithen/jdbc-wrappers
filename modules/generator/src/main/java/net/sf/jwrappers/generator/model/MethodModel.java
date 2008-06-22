@@ -3,6 +3,7 @@ package net.sf.jwrappers.generator.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.sf.jwrappers.generator.Access;
 import net.sf.jwrappers.generator.MType;
 import net.sf.jwrappers.generator.MethodSignature;
 import net.sf.jwrappers.generator.model.javadoc.JavadocModel;
@@ -12,6 +13,7 @@ import net.sf.jwrappers.generator.writer.IndentCodeWriter;
 public class MethodModel {
     private final ClassModel classModel;
     private final JavadocModel javadoc = new JavadocModel();
+    private Access access = Access.PUBLIC;
     private boolean isSynchonized;
     private MType returnType;
 	private String name;
@@ -30,6 +32,14 @@ public class MethodModel {
 
     public JavadocModel getJavadoc() {
         return javadoc;
+    }
+
+    public Access getAccess() {
+        return access;
+    }
+
+    public void setAccess(Access access) {
+        this.access = access;
     }
 
     public boolean isSynchonized() {
@@ -105,7 +115,10 @@ public class MethodModel {
     
 	public void generate(CodeWriter out, Imports imports) {
 	    javadoc.generate(out, imports);
-	    out.write("public ");
+        if (access.hasIdentifier()) {
+            out.write(access.getIdentifier());
+            out.write(" ");
+        }
 	    if (isSynchonized) {
 	        out.write("synchronized ");
 	    }

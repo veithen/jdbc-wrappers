@@ -3,6 +3,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.sf.jwrappers.generator.Access;
 import net.sf.jwrappers.generator.MClassType;
 import net.sf.jwrappers.generator.MType;
 import net.sf.jwrappers.generator.model.Argument;
@@ -13,8 +14,10 @@ import net.sf.jwrappers.generator.model.MethodModel;
 import net.sf.jwrappers.generator.model.Model;
 import net.sf.jwrappers.generator.model.code.AttributeExpression;
 import net.sf.jwrappers.generator.model.code.Expression;
+import net.sf.jwrappers.generator.model.code.IfStatement;
 import net.sf.jwrappers.generator.model.code.MethodInvocation;
 import net.sf.jwrappers.generator.model.code.ReturnInstruction;
+import net.sf.jwrappers.generator.model.code.SourceStatement;
 import net.sf.jwrappers.generator.model.javadoc.JavadocModel;
 
 public class WrapperClassModel {
@@ -48,13 +51,11 @@ public class WrapperClassModel {
     public void build() {
         ClassModel wrapperClass = getWrapperClass();
         
-        Attribute wrapperFactoryAttribute = wrapperClass.createAttribute("wrapperFactory", new MClassType(wrapperModel.getWrapperFactory()));
-        Attribute targetAttribute = wrapperClass.createAttribute("parent", new MClassType(targetClass));
+        Attribute wrapperFactoryAttribute = wrapperClass.createAttribute(Access.PACKAGE, "wrapperFactory", new MClassType(wrapperModel.getWrapperFactory()));
+        Attribute targetAttribute = wrapperClass.createAttribute(Access.PACKAGE, "parent", new MClassType(targetClass));
         
         buildInitMethod();
-        
-        MethodModel unwrapMethod = wrapperClass.createMethod("unwrap");
-        unwrapMethod.setReturnType(new MClassType(targetClass));
+        buildUnwrapMethod(wrapperFactoryAttribute, targetAttribute);
         
         Expression targetExpression = new AttributeExpression(Expression.SELF, targetAttribute);
         List<MethodModel> targetMethods = new ArrayList<MethodModel>(targetClass.getMethods());
@@ -98,14 +99,25 @@ public class WrapperClassModel {
             javadoc.addText("{@inheritDoc}\n");
         }
     }
-    
+
     private void buildInitMethod() {
         MethodModel initMethod = wrapperClass.createMethod("init");
+        initMethod.setAccess(Access.PROTECTED);
         initMethod.addException(wrapperModel.getDefaultException());
         JavadocModel javadoc = initMethod.getJavadoc();
         javadoc.addText("Wrapper initialization method. This method is executed once before any\n");
         javadoc.addText("delegate method is called on the wrapper. Subclasses can override this\n");
         javadoc.addText("method to do initialization work. The default implementation does\n");
         javadoc.addText("nothing.\n");
+        javadoc.addThrows(wrapperModel.getDefaultException(), wrapperModel.getDefaultExceptionDescription());
+    }
+    
+    private void buildUnwrapMethod(Attribute wrapperFactoryAttribute, Attribute targetAttribute) {
+        MethodModel unwrapMethod = wrapperClass.createMethod("unwrap");
+        unwrapMethod.setReturnType(new MClassType(targetClass));
+        IfStatement ifStatement = new IfStatement(new MethodInvocation(new AttributeExpression(Expression.SELF, wrapperFactoryAttribute), wrapperModel.getIsAllowUnwrapMethod()));
+        ifStatement.getIfClause().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, targetAttribute)));
+        ifStatement.getElseClause().addInstruction(new SourceStatement("throw new IllegalStateException(\"unwrap not allowed\")"));
+        unwrapMethod.getCode().addInstruction(ifStatement);
     }
 }

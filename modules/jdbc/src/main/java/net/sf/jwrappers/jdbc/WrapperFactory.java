@@ -25,9 +25,6 @@ import javax.sql.DataSource;
 
 /**
  * Wrapper factory base class.
- * 
- * @author Andreas Veithen
- * @version $Id$
  */
 public class WrapperFactory {
     private boolean allowUnwrap;

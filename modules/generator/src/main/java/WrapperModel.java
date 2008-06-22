@@ -3,7 +3,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.sf.jwrappers.generator.MClassType;
-import net.sf.jwrappers.generator.MType;
 import net.sf.jwrappers.generator.model.Attribute;
 import net.sf.jwrappers.generator.model.ClassModel;
 import net.sf.jwrappers.generator.model.ClassName;
@@ -16,8 +15,10 @@ import net.sf.jwrappers.generator.model.code.ReturnInstruction;
 public class WrapperModel {
     private final Model model = new Model();
     private String packageName;
-    private MType defaultException;
+    private MClassType defaultException;
+    private String defaultExceptionDescription;
     private ClassModel wrapperFactory;
+    private MethodModel isAllowUnwrapMethod;
     private Map<ClassName,WrapperClassModel> wrapperClasses = new LinkedHashMap<ClassName,WrapperClassModel>();
     private Map<ClassName,MethodModel> wrapMethods = new HashMap<ClassName,MethodModel>();
     
@@ -33,12 +34,17 @@ public class WrapperModel {
         this.packageName = packageName;
     }
     
-    public MType getDefaultException() {
+    public MClassType getDefaultException() {
         return defaultException;
     }
 
-    public void setDefaultExceptionType(Class<?> defaultExceptionType) {
-        defaultException = model.importType(defaultExceptionType);
+    public String getDefaultExceptionDescription() {
+        return defaultExceptionDescription;
+    }
+
+    public void setDefaultExceptionType(Class<?> defaultExceptionType, String description) {
+        defaultException = (MClassType)model.importType(defaultExceptionType);
+        defaultExceptionDescription = description;
     }
     
     public WrapperClassModel addInterface(Class<?> iface) {
@@ -65,8 +71,9 @@ public class WrapperModel {
     public ClassModel getWrapperFactory() {
         if (wrapperFactory == null) {
             wrapperFactory = model.createClass(new ClassName(packageName, "WrapperFactory"));
+            wrapperFactory.getJavadoc().addText("Wrapper factory base class.");
             Attribute allowUnwrapAttribute = wrapperFactory.createAttribute("allowUnwrap", model.importType(Boolean.TYPE));
-            MethodModel isAllowUnwrapMethod = wrapperFactory.createMethod("isAllowUnwrap");
+            isAllowUnwrapMethod = wrapperFactory.createMethod("isAllowUnwrap");
             isAllowUnwrapMethod.setSynchonized(true);
             isAllowUnwrapMethod.setReturnType(model.importType(Boolean.TYPE));
             isAllowUnwrapMethod.getCode().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, allowUnwrapAttribute)));
@@ -75,6 +82,10 @@ public class WrapperModel {
             setAllowUnwrapMethod.createArgument("allowUnwrap", model.importType(Boolean.TYPE));
         }
         return wrapperFactory;
+    }
+
+    public MethodModel getIsAllowUnwrapMethod() {
+        return isAllowUnwrapMethod;
     }
 
     public void build() {

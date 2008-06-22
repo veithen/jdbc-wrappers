@@ -21,7 +21,7 @@ public class Test {
     public static void main(String[] args) throws IOException {
         WrapperModel wrapperModel = new WrapperModel();
         wrapperModel.setPackageName("net.sf.jwrappers.jdbc");
-        wrapperModel.setDefaultExceptionType(SQLException.class);
+        wrapperModel.setDefaultExceptionType(SQLException.class, "if a database access error occurs");
         wrapperModel.addInterface(DataSource.class);
         wrapperModel.addInterface(Connection.class);
         wrapperModel.addInterface(DatabaseMetaData.class);
