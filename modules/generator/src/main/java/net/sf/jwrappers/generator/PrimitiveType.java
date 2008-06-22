@@ -6,7 +6,7 @@ import java.util.Map;
 import net.sf.jwrappers.generator.model.ClassNameFormatter;
 import net.sf.jwrappers.generator.model.Imports;
 
-public class PrimitiveType implements MType {
+public class PrimitiveType extends MType {
     private static final Map<Class<?>,PrimitiveType> primitiveTypeMap = new HashMap<Class<?>,PrimitiveType>();
     
     private final String name;
@@ -24,10 +24,12 @@ public class PrimitiveType implements MType {
         return primitiveType;
     }
 
+    @Override
     public void collectImports(Imports imports) {
         // Nothing to do
     }
 
+    @Override
     public String toString(ClassNameFormatter classNameFormatter) {
         return name;
     }

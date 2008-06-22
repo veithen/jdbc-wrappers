@@ -25,16 +25,22 @@ public class WrapperClassModel {
     private final WrapperModel wrapperModel;
     private final Model model;
     private final ClassModel targetClass;
-    private ClassModel wrapperClass;
-    private Attribute wrapperFactoryAttribute;
-    private Attribute targetAttribute;
-    private MethodModel initMethod;
-    private List<Attribute> relations = new LinkedList<Attribute>();
+    private final List<Attribute> relations = new LinkedList<Attribute>();
+    private final Holder<ClassModel> wrapperClassHolder = new Holder<ClassModel>();
+    private final Holder<WrapperClassModel> baseWrapperHolder = new Holder<WrapperClassModel>();
+    private final Holder<Attribute> wrapperFactoryAttributeHolder = new Holder<Attribute>();
+    private final Holder<Attribute> targetAttributeHolder = new Holder<Attribute>();
+    private final Holder<Attribute> baseWrapperAttributeHolder = new Holder<Attribute>();
+    private final Holder<MethodModel> initMethodHolder = new Holder<MethodModel>();
     
     public WrapperClassModel(WrapperModel wrapperModel, Class<?> iface) {
         this.wrapperModel = wrapperModel;
         model = wrapperModel.getModel();
         targetClass = model.importClass(iface);
+    }
+    
+    public ClassModel getTargetClass() {
+        return targetClass;
     }
     
     public List<Attribute> getRelations() {
@@ -47,38 +53,61 @@ public class WrapperClassModel {
     }
     
     public ClassModel getWrapperClass() {
-        if (wrapperClass == null) {
-            wrapperClass = model.createClass(new ClassName(wrapperModel.getPackageName(), targetClass.getName().getUnqualifiedName() + "Wrapper"));
+        if (!wrapperClassHolder.isSet()) {
+            ClassModel wrapperClass = model.createClass(new ClassName(wrapperModel.getPackageName(), targetClass.getName().getUnqualifiedName() + "Wrapper"));
             wrapperClass.addInterface(new MClassType(targetClass));
+            wrapperClassHolder.set(wrapperClass);
         }
-        return wrapperClass;
-    }
-    
-    public ClassModel getTargetClass() {
-        return targetClass;
+        return wrapperClassHolder.get();
     }
     
     public MType getWrapperClassType() {
         return new MClassType(getWrapperClass());
     }
     
-    public Attribute getWrapperFactoryAttribute() {
-        if (wrapperFactoryAttribute == null) {
-            wrapperFactoryAttribute = wrapperClass.createAttribute(Access.PACKAGE, "wrapperFactory", new MClassType(wrapperModel.getWrapperFactory()));
+    public WrapperClassModel getBaseWrapper() {
+        if (!baseWrapperHolder.isSet()) {
+            List<MType> ifaces = targetClass.getInterfaces();
+            if (ifaces.isEmpty()) {
+                baseWrapperHolder.set(null);
+            } else if (ifaces.size() > 1) {
+                throw new Error();
+            } else {
+                baseWrapperHolder.set(wrapperModel.getWrapperClass(((MClassType)ifaces.get(0)).getName()));
+            }
         }
-        return wrapperFactoryAttribute;
+        return baseWrapperHolder.get();
+    }
+    
+    public Attribute getWrapperFactoryAttribute() {
+        if (!wrapperFactoryAttributeHolder.isSet()) {
+            wrapperFactoryAttributeHolder.set(getWrapperClass().createAttribute(Access.PACKAGE, "wrapperFactory", new MClassType(wrapperModel.getWrapperFactory())));
+        }
+        return wrapperFactoryAttributeHolder.get();
     }
     
     public Attribute getTargetAttribute() {
-        if (targetAttribute == null) {
-            targetAttribute = wrapperClass.createAttribute(Access.PACKAGE, "parent", new MClassType(targetClass));
+        if (!targetAttributeHolder.isSet()) {
+            targetAttributeHolder.set(getWrapperClass().createAttribute(Access.PACKAGE, "parent", new MClassType(targetClass)));
         }
-        return targetAttribute;
+        return targetAttributeHolder.get();
+    }
+    
+    public Attribute getBaseWrapperAttribute() {
+        if (!baseWrapperAttributeHolder.isSet()) {
+            WrapperClassModel baseWrapper = getBaseWrapper();
+            if (baseWrapper == null) {
+                baseWrapperAttributeHolder.set(null);
+            } else {
+                baseWrapperAttributeHolder.set(getWrapperClass().createAttribute(Access.PACKAGE, "baseWrapper", new MClassType(baseWrapper.getWrapperClass())));
+            }
+        }
+        return baseWrapperAttributeHolder.get();
     }
 
     public MethodModel getInitMethod() {
-        if (initMethod == null) {
-            initMethod = wrapperClass.createMethod("init");
+        if (!initMethodHolder.isSet()) {
+            MethodModel initMethod = getWrapperClass().createMethod("init");
             initMethod.setAccess(Access.PROTECTED);
             initMethod.addException(wrapperModel.getDefaultException());
             JavadocModel javadoc = initMethod.getJavadoc();
@@ -87,8 +116,9 @@ public class WrapperClassModel {
             javadoc.addText("method to do initialization work. The default implementation does\n");
             javadoc.addText("nothing.\n");
             javadoc.addThrows(wrapperModel.getDefaultException(), wrapperModel.getDefaultExceptionDescription());
+            initMethodHolder.set(initMethod);
         }
-        return initMethod;
+        return initMethodHolder.get();
     }
 
     public void build() {
@@ -96,14 +126,30 @@ public class WrapperClassModel {
         
         buildUnwrapMethod();
         
-        List<MethodModel> targetMethods = new ArrayList<MethodModel>(targetClass.getMethods());
-        Collections.sort(targetMethods, new Comparator<MethodModel>() {
-            public int compare(MethodModel o1, MethodModel o2) {
-                return o1.getSignature().toString().compareTo(o2.getSignature().toString());
+        WrapperClassModel baseWrapper = getBaseWrapper();
+        if (baseWrapper != null) {
+            List<MethodModel> baseWrapperMethods = new LinkedList<MethodModel>();
+            while (baseWrapper != null) {
+                baseWrapperMethods.addAll(baseWrapper.getTargetClass().getMethods());
+                baseWrapper = baseWrapper.getBaseWrapper();
             }
-        });
+            for (MethodModel baseWrapperMethod : sortMethods(baseWrapperMethods)) {
+                MethodModel method = wrapperClass.overrideMethod(baseWrapperMethod);
+                MethodInvocation invocation = new MethodInvocation(new AttributeExpression(Expression.SELF, getBaseWrapperAttribute()), baseWrapperMethod);
+                for (Argument argument : method.getArguments()) {
+                    invocation.addArgument(argument);
+                }
+                MType returnType = method.getReturnType();
+                if (returnType != null) {
+                    method.getCode().addInstruction(new ReturnInstruction(invocation));
+                } else {
+                    method.getCode().addInstruction(invocation);
+                }
+            }
+        }
+        
         outer:
-        for (MethodModel targetMethod : targetMethods) {
+        for (MethodModel targetMethod : sortMethods(targetClass.getMethods())) {
             MethodModel method = wrapperClass.overrideMethod(targetMethod);
             MType returnType = method.getReturnType();
             if (returnType != null) {
@@ -118,8 +164,18 @@ public class WrapperClassModel {
         }
     }
     
+    private static List<MethodModel> sortMethods(List<MethodModel> methods) {
+        List<MethodModel> result = new ArrayList<MethodModel>(methods);
+        Collections.sort(result, new Comparator<MethodModel>() {
+            public int compare(MethodModel o1, MethodModel o2) {
+                return o1.getSignature().toString().compareTo(o2.getSignature().toString());
+            }
+        });
+        return result;
+    }
+    
     private void buildUnwrapMethod() {
-        MethodModel unwrapMethod = wrapperClass.createMethod("unwrap");
+        MethodModel unwrapMethod = getWrapperClass().createMethod("unwrap");
         unwrapMethod.setReturnType(new MClassType(targetClass));
         IfStatement ifStatement = new IfStatement(new MethodInvocation(new AttributeExpression(Expression.SELF, getWrapperFactoryAttribute()), wrapperModel.getIsAllowUnwrapMethod()));
         ifStatement.getIfClause().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, getTargetAttribute())));
@@ -148,7 +204,7 @@ public class WrapperClassModel {
         javadoc.addText("Delegate method for ");
         javadoc.addLink(targetMethod);
         javadoc.addText(".\n");
-        MethodInvocation invocation = new MethodInvocation(new AttributeExpression(Expression.SELF, targetAttribute), targetMethod);
+        MethodInvocation invocation = new MethodInvocation(new AttributeExpression(Expression.SELF, getTargetAttribute()), targetMethod);
         for (Argument argument : method.getArguments()) {
             invocation.addArgument(argument);
         }
@@ -159,7 +215,7 @@ public class WrapperClassModel {
                 ClassName returnClass = ((MClassType)returnType).getName();
                 MethodModel wrapMethod = wrapperModel.getWrapMethod(returnClass);
                 if (wrapMethod != null) {
-                    MethodInvocation wrapInvocation = new MethodInvocation(new AttributeExpression(Expression.SELF, wrapperFactoryAttribute), wrapMethod);
+                    MethodInvocation wrapInvocation = new MethodInvocation(new AttributeExpression(Expression.SELF, getWrapperFactoryAttribute()), wrapMethod);
                     wrapInvocation.addArgument(expression);
                     for (Attribute relation : wrapperModel.getWrapperClass(returnClass).getRelations()) {
                         if (relation.getType().equals(new MClassType(targetClass))) {

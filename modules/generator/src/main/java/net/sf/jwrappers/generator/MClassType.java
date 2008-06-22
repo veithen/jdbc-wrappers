@@ -5,7 +5,7 @@ import net.sf.jwrappers.generator.model.ClassName;
 import net.sf.jwrappers.generator.model.ClassNameFormatter;
 import net.sf.jwrappers.generator.model.Imports;
 
-public class MClassType implements MType {
+public class MClassType extends MType {
 	private ClassName name;
 	
 	public MClassType(ClassName name) {
@@ -24,10 +24,12 @@ public class MClassType implements MType {
 		return null;
 	}
 
+    @Override
     public void collectImports(Imports imports) {
         imports.add(name);
     }
 
+    @Override
     public String toString(ClassNameFormatter classNameFormatter) {
         return classNameFormatter.format(name);
     }

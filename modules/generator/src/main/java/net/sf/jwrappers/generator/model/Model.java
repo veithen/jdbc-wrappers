@@ -24,6 +24,13 @@ public class Model {
     
 	public ClassModel importClass(Class<?> clazz) {
 		ClassModel classModel = new ClassModel(new ClassName(clazz.getName()));
+		Class<?> superclass = clazz.getSuperclass();
+		if (superclass != null) {
+		    classModel.setSuperClass(importType(superclass));
+		}
+		for (Class<?> iface : clazz.getInterfaces()) {
+		    classModel.addInterface(importType(iface));
+		}
 		for (Method method : clazz.getDeclaredMethods()) {
 			MethodModel methodModel = classModel.createMethod(method.getName());
 			Class<?> returnType = method.getReturnType();

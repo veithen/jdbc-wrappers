@@ -182,19 +182,19 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
      * 
      * {@inheritDoc}
      */
-    public String nativeSQL(String sql) throws SQLException {
-        return parent.nativeSQL(sql);
+    public String nativeSQL(String arg0) throws SQLException {
+        return parent.nativeSQL(arg0);
     }
 
     /**
-     * Delegate method for {@link Connection#prepareCall(String, int, int, int)}.
+     * Delegate method for {@link Connection#prepareCall(String)}.
      * This method wraps the {@link CallableStatement} object using
      * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement)}.
      * 
      * {@inheritDoc}
      */
-    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return wrapperFactory.wrapCallableStatement(this, parent.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability), sql);
+    public CallableStatement prepareCall(String sql) throws SQLException {
+        return wrapperFactory.wrapCallableStatement(this, parent.prepareCall(sql), sql);
     }
 
     /**
@@ -209,14 +209,14 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     }
 
     /**
-     * Delegate method for {@link Connection#prepareCall(String)}.
+     * Delegate method for {@link Connection#prepareCall(String, int, int, int)}.
      * This method wraps the {@link CallableStatement} object using
      * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement)}.
      * 
      * {@inheritDoc}
      */
-    public CallableStatement prepareCall(String sql) throws SQLException {
-        return wrapperFactory.wrapCallableStatement(this, parent.prepareCall(sql), sql);
+    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+        return wrapperFactory.wrapCallableStatement(this, parent.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability), sql);
     }
 
     /**

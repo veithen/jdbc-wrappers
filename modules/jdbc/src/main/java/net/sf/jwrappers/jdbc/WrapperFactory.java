@@ -94,7 +94,7 @@ public class WrapperFactory {
     final CallableStatementWrapper wrapCallableStatement(ConnectionWrapper connectionWrapper, CallableStatement parent, String sql) throws SQLException {
         CallableStatementWrapper wrapper = createCallableStatementWrapper();
         wrapper.wrapperFactory = this;
-        wrapper.preparedStatementWrapper = wrapPreparedStatement(connectionWrapper, parent, sql);
+        wrapper.baseWrapper = wrapPreparedStatement(connectionWrapper, parent, sql);
         wrapper.parent = parent;
         wrapper.init();
         return wrapper;
