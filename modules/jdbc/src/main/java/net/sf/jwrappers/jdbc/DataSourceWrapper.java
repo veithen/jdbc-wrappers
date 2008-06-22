@@ -28,7 +28,28 @@ import javax.sql.DataSource;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class DataSourceWrapper extends AbstractWrapper<DataSource> implements DataSource {
+public class DataSourceWrapper implements DataSource {
+    WrapperFactory wrapperFactory;
+    DataSource parent;
+    
+    /**
+     * Wrapper initialization method. This method is executed once before any
+     * delegate method is called on the wrapper. Subclasses can override this
+     * method to do initialization work. The default implementation does
+     * nothing.
+     * @throws SQLException if a database access error occurs
+     */
+    protected void init() throws SQLException {
+    }
+    
+    public DataSource unwrap() {
+        if (wrapperFactory.isAllowUnwrap()) {
+            return parent;
+        } else {
+            throw new IllegalStateException("unwrap not allowed");
+        }
+    }
+    
     /**
      * Delegate method for {@link DataSource#getConnection()}.
      * This method wraps the {@link Connection} object using
