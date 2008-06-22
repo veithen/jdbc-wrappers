@@ -31,7 +31,7 @@ import javax.sql.DataSource;
 public class DataSourceWrapper implements DataSource {
     WrapperFactory wrapperFactory;
     DataSource parent;
-    
+
     /**
      * Wrapper initialization method. This method is executed once before any
      * delegate method is called on the wrapper. Subclasses can override this
@@ -41,7 +41,7 @@ public class DataSourceWrapper implements DataSource {
      */
     protected void init() throws SQLException {
     }
-    
+
     public DataSource unwrap() {
         if (wrapperFactory.isAllowUnwrap()) {
             return parent;
@@ -49,7 +49,7 @@ public class DataSourceWrapper implements DataSource {
             throw new IllegalStateException("unwrap not allowed");
         }
     }
-    
+
     /**
      * Delegate method for {@link DataSource#getConnection()}.
      * This method wraps the {@link Connection} object using
@@ -57,9 +57,9 @@ public class DataSourceWrapper implements DataSource {
      * 
      * {@inheritDoc}
      */
-	public Connection getConnection() throws SQLException {
-		return wrapperFactory.wrapConnection(parent.getConnection());
-	}
+    public Connection getConnection() throws SQLException {
+        return wrapperFactory.wrapConnection(parent.getConnection());
+    }
 
     /**
      * Delegate method for {@link DataSource#getConnection(String, String)}.
@@ -68,43 +68,43 @@ public class DataSourceWrapper implements DataSource {
      * 
      * {@inheritDoc}
      */
-	public Connection getConnection(String username, String password) throws SQLException {
-		return wrapperFactory.wrapConnection(parent.getConnection(username, password));
-	}
+    public Connection getConnection(String arg0, String arg1) throws SQLException {
+        return wrapperFactory.wrapConnection(parent.getConnection(arg0, arg1));
+    }
 
     /**
      * Delegate method for {@link DataSource#getLoginTimeout()}.
      * 
      * {@inheritDoc}
      */
-	public int getLoginTimeout() throws SQLException {
-		return parent.getLoginTimeout();
-	}
+    public int getLoginTimeout() throws SQLException {
+        return parent.getLoginTimeout();
+    }
 
     /**
      * Delegate method for {@link DataSource#getLogWriter()}.
      * 
      * {@inheritDoc}
      */
-	public PrintWriter getLogWriter() throws SQLException {
-		return parent.getLogWriter();
-	}
+    public PrintWriter getLogWriter() throws SQLException {
+        return parent.getLogWriter();
+    }
 
     /**
      * Delegate method for {@link DataSource#setLoginTimeout(int)}.
      * 
      * {@inheritDoc}
      */
-	public void setLoginTimeout(int seconds) throws SQLException {
-		parent.setLoginTimeout(seconds);
-	}
+    public void setLoginTimeout(int arg0) throws SQLException {
+        parent.setLoginTimeout(arg0);
+    }
 
     /**
      * Delegate method for {@link DataSource#setLogWriter(PrintWriter)}.
      * 
      * {@inheritDoc}
      */
-	public void setLogWriter(PrintWriter out) throws SQLException {
-		parent.setLogWriter(out);
-	}
+    public void setLogWriter(PrintWriter arg0) throws SQLException {
+        parent.setLogWriter(arg0);
+    }
 }

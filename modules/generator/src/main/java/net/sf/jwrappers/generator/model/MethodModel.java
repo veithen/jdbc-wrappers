@@ -4,24 +4,40 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.sf.jwrappers.generator.MType;
+import net.sf.jwrappers.generator.MethodSignature;
 import net.sf.jwrappers.generator.model.javadoc.JavadocModel;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 import net.sf.jwrappers.generator.writer.IndentCodeWriter;
 
 public class MethodModel {
+    private final ClassModel classModel;
     private final JavadocModel javadoc = new JavadocModel();
+    private boolean isSynchonized;
     private MType returnType;
 	private String name;
 	private final List<Argument> arguments = new LinkedList<Argument>();
 	private final List<MType> exceptions = new LinkedList<MType>();
 	private final CodeModel code = new CodeModel();
 	
-	public MethodModel(String name) {
+	MethodModel(ClassModel classModel, String name) {
+	    this.classModel = classModel;
 		this.name = name;
 	}
 	
-	public JavadocModel getJavadoc() {
+	public ClassModel getClassModel() {
+        return classModel;
+    }
+
+    public JavadocModel getJavadoc() {
         return javadoc;
+    }
+
+    public boolean isSynchonized() {
+        return isSynchonized;
+    }
+
+    public void setSynchonized(boolean isSynchonized) {
+        this.isSynchonized = isSynchonized;
     }
 
     public MType getReturnType() {
@@ -65,6 +81,15 @@ public class MethodModel {
     public CodeModel getCode() {
         return code;
     }
+    
+    public MethodSignature getSignature() {
+        MType[] argumentTypes = new MType[arguments.size()];
+        int i = 0;
+        for (Argument argument : arguments) {
+            argumentTypes[i++] = argument.getType();
+        }
+        return new MethodSignature(name, argumentTypes);
+    }
 
     public void collectImports(Imports imports) {
         if (returnType != null) {
@@ -81,6 +106,9 @@ public class MethodModel {
 	public void generate(CodeWriter out, Imports imports) {
 	    javadoc.generate(out, imports);
 	    out.write("public ");
+	    if (isSynchonized) {
+	        out.write("synchronized ");
+	    }
 	    if (returnType == null) {
 	        out.write("void");
 	    } else {

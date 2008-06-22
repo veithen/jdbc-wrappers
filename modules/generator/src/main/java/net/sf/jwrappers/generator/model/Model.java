@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.sf.jwrappers.generator.ArrayType;
 import net.sf.jwrappers.generator.MClassType;
 import net.sf.jwrappers.generator.MType;
 import net.sf.jwrappers.generator.PrimitiveType;
@@ -42,6 +43,8 @@ public class Model {
 	public MType importType(Class<?> clazz) {
 		if (clazz.isPrimitive()) {
 			return PrimitiveType.get(clazz);
+		} if (clazz.isArray()) {
+		    return new ArrayType(importType(clazz.getComponentType()));
 		} else {
 			return new MClassType(new ClassName(clazz.getName()));
 		}

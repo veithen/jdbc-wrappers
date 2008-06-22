@@ -22,8 +22,12 @@ public class MethodInvocation implements Expression {
 
     public String toString(Imports imports) {
         StringBuilder buffer = new StringBuilder();
-        buffer.append(object.toString(imports));
-        buffer.append('.');
+        if (object == Expression.SELF) {
+            // TODO
+        } else {
+            buffer.append(object.toString(imports));
+            buffer.append('.');
+        }
         buffer.append(method.getName());
         buffer.append('(');
         boolean first = true;

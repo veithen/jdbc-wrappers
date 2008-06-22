@@ -21,10 +21,6 @@ public class IndentCodeWriter extends CodeWriter {
 
     @Override
     public void writeln() {
-        // TODO: remove this later
-        if (startOfLine) {
-            parent.write("    ");
-        }
         parent.writeln();
         startOfLine = true;
     }

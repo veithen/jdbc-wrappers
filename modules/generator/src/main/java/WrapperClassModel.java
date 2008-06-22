@@ -1,4 +1,10 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import net.sf.jwrappers.generator.MClassType;
+import net.sf.jwrappers.generator.MType;
 import net.sf.jwrappers.generator.model.Argument;
 import net.sf.jwrappers.generator.model.Attribute;
 import net.sf.jwrappers.generator.model.ClassModel;
@@ -24,13 +30,24 @@ public class WrapperClassModel {
     }
     
     public ClassModel getWrapperClass() {
+        if (wrapperClass == null) {
+            wrapperClass = model.createClass(new ClassName(wrapperModel.getPackageName(), targetClass.getName().getUnqualifiedName() + "Wrapper"));
+            wrapperClass.addInterface(new MClassType(targetClass));
+        }
         return wrapperClass;
+    }
+    
+    public ClassModel getTargetClass() {
+        return targetClass;
+    }
+    
+    public MType getWrapperClassType() {
+        return new MClassType(getWrapperClass());
     }
 
     public void build() {
-        wrapperClass = model.createClass(new ClassName(wrapperModel.getPackageName(), targetClass.getName().getUnqualifiedName() + "Wrapper"));
-        wrapperClass.addInterface(new MClassType(targetClass));
-
+        ClassModel wrapperClass = getWrapperClass();
+        
         Attribute wrapperFactoryAttribute = wrapperClass.createAttribute("wrapperFactory", new MClassType(wrapperModel.getWrapperFactory()));
         Attribute targetAttribute = wrapperClass.createAttribute("parent", new MClassType(targetClass));
         
@@ -40,17 +57,45 @@ public class WrapperClassModel {
         unwrapMethod.setReturnType(new MClassType(targetClass));
         
         Expression targetExpression = new AttributeExpression(Expression.SELF, targetAttribute);
-        for (MethodModel targetMethod : targetClass.getMethods()) {
+        List<MethodModel> targetMethods = new ArrayList<MethodModel>(targetClass.getMethods());
+        Collections.sort(targetMethods, new Comparator<MethodModel>() {
+            public int compare(MethodModel o1, MethodModel o2) {
+                return o1.getSignature().compareTo(o2.getSignature());
+            }
+        });
+        for (MethodModel targetMethod : targetMethods) {
             MethodModel method = wrapperClass.overrideMethod(targetMethod);
+            JavadocModel javadoc = method.getJavadoc();
+            javadoc.addText("Delegate method for ");
+            javadoc.addLink(targetMethod);
+            javadoc.addText(".\n");
             MethodInvocation invocation = new MethodInvocation(targetExpression, targetMethod);
             for (Argument argument : method.getArguments()) {
                 invocation.addArgument(argument);
             }
-            if (method.getReturnType() != null) {
-                method.getCode().addInstruction(new ReturnInstruction(invocation));
+            MType returnType = method.getReturnType();
+            if (returnType != null) {
+                Expression expression = invocation;
+                if (returnType instanceof MClassType) {
+                    ClassName returnClass = ((MClassType)returnType).getName();
+                    MethodModel wrapMethod = wrapperModel.getWrapMethod(returnClass);
+                    if (wrapMethod != null) {
+                        MethodInvocation wrapInvocation = new MethodInvocation(new AttributeExpression(Expression.SELF, wrapperFactoryAttribute), wrapMethod);
+                        wrapInvocation.addArgument(expression);
+                        expression = wrapInvocation;
+                        javadoc.addText("This method wraps the ");
+                        javadoc.addLink(returnClass);
+                        javadoc.addText(" object using\n");
+                        javadoc.addLink(wrapMethod);
+                        javadoc.addText(".\n");
+                    }
+                }
+                method.getCode().addInstruction(new ReturnInstruction(expression));
             } else {
                 method.getCode().addInstruction(invocation);
             }
+            javadoc.addText("\n");
+            javadoc.addText("{@inheritDoc}\n");
         }
     }
     

@@ -49,7 +49,7 @@ public class ClassModel {
 	}
 	
 	public MethodModel createMethod(String name) {
-	    MethodModel method = new MethodModel(name);
+	    MethodModel method = new MethodModel(this, name);
 	    methods.add(method);
 	    return method;
 	}

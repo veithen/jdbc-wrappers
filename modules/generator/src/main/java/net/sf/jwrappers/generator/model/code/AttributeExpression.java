@@ -13,6 +13,14 @@ public class AttributeExpression implements Expression {
     }
 
     public String toString(Imports imports) {
-        return object.toString(imports) + "." + attribute.getName();
+        StringBuilder buffer = new StringBuilder();
+        if (object == Expression.SELF) {
+            // TODO
+        } else {
+            buffer.append(object.toString(imports));
+            buffer.append('.');
+        }
+        buffer.append(attribute.getName());
+        return buffer.toString();
     }
 }

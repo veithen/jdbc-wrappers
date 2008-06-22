@@ -3,7 +3,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
@@ -17,6 +23,12 @@ public class Test {
         wrapperModel.setPackageName("net.sf.jwrappers.jdbc");
         wrapperModel.setDefaultExceptionType(SQLException.class);
         wrapperModel.addInterface(DataSource.class);
+        wrapperModel.addInterface(Connection.class);
+        wrapperModel.addInterface(DatabaseMetaData.class);
+        wrapperModel.addInterface(Statement.class);
+        wrapperModel.addInterface(PreparedStatement.class);
+        wrapperModel.addInterface(CallableStatement.class);
+        wrapperModel.addInterface(ResultSet.class);
         
         wrapperModel.build();
         

@@ -15,7 +15,11 @@ public class MClassType implements MType {
 	    name = classModel.getName();
 	}
 	
-	public ClassModel getMClass() {
+	public ClassName getName() {
+        return name;
+    }
+
+    public ClassModel getMClass() {
 		return null;
 	}
 
