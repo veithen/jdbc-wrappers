@@ -9,5 +9,11 @@ public interface Expression {
         }
     };
     
+    Expression NULL = new Expression() {
+        public String toString(Imports imports) {
+            return "null";
+        }
+    };
+    
     String toString(Imports imports);
 }

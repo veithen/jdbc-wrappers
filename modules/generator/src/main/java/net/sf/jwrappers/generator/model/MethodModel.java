@@ -14,6 +14,7 @@ public class MethodModel {
     private final ClassModel classModel;
     private final JavadocModel javadoc = new JavadocModel();
     private Access access = Access.PUBLIC;
+    private boolean isFinal;
     private boolean isSynchonized;
     private MType returnType;
 	private String name;
@@ -40,6 +41,14 @@ public class MethodModel {
 
     public void setAccess(Access access) {
         this.access = access;
+    }
+
+    public boolean isFinal() {
+        return isFinal;
+    }
+
+    public void setFinal(boolean isFinal) {
+        this.isFinal = isFinal;
     }
 
     public boolean isSynchonized() {
@@ -118,6 +127,9 @@ public class MethodModel {
         if (access.hasIdentifier()) {
             out.write(access.getIdentifier());
             out.write(" ");
+        }
+        if (isFinal) {
+            out.write("final ");
         }
 	    if (isSynchonized) {
 	        out.write("synchronized ");

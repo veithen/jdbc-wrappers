@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 import net.sf.jwrappers.generator.writer.CodeWriter;
 
-public class Imports {
+public class Imports implements ClassNameFormatter {
     private static final Pattern[] importGroups = {
         Pattern.compile("java\\..*"),
         Pattern.compile("javax\\..*"),

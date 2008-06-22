@@ -64,34 +64,34 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#createStatement()}.
      * This method wraps the {@link Statement} object using
-     * {@link WrapperFactory#wrapStatement(ConnectionWrapper, Statement)}.
+     * {@link WrapperFactory#wrapStatement(Statement, ConnectionWrapper)}.
      * 
      * {@inheritDoc}
      */
     public Statement createStatement() throws SQLException {
-        return wrapperFactory.wrapStatement(this, parent.createStatement());
+        return wrapperFactory.wrapStatement(parent.createStatement(), this);
     }
 
     /**
      * Delegate method for {@link Connection#createStatement(int, int, int))}.
      * This method wraps the {@link Statement} object using
-     * {@link WrapperFactory#wrapStatement(ConnectionWrapper, Statement)}.
+     * {@link WrapperFactory#wrapStatement(Statement, ConnectionWrapper)}.
      * 
      * {@inheritDoc}
      */
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return wrapperFactory.wrapStatement(this, parent.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability));
+        return wrapperFactory.wrapStatement(parent.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability), this);
     }
 
     /**
      * Delegate method for {@link Connection#createStatement(int, int))}.
      * This method wraps the {@link Statement} object using
-     * {@link WrapperFactory#wrapStatement(ConnectionWrapper, Statement)}.
+     * {@link WrapperFactory#wrapStatement(Statement, ConnectionWrapper)}.
      * 
      * {@inheritDoc}
      */
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-        return wrapperFactory.wrapStatement(this, parent.createStatement(resultSetType, resultSetConcurrency));
+        return wrapperFactory.wrapStatement(parent.createStatement(resultSetType, resultSetConcurrency), this);
     }
 
     /**
@@ -129,7 +129,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
      * {@inheritDoc}
      */
     public DatabaseMetaData getMetaData() throws SQLException {
-        return wrapperFactory.wrapDatabaseMetaData(this, parent.getMetaData());
+        return wrapperFactory.wrapDatabaseMetaData(parent.getMetaData(), this);
     }
 
     /**

@@ -41,7 +41,7 @@ public class WrapperFactory {
         return new DataSourceWrapper();
     }
 
-    public DataSourceWrapper wrapDataSource(DataSource parent) throws SQLException {
+    public final DataSourceWrapper wrapDataSource(DataSource parent) throws SQLException {
         DataSourceWrapper wrapper = createDataSourceWrapper();
         wrapper.wrapperFactory = this;
         wrapper.parent = parent;
@@ -65,11 +65,11 @@ public class WrapperFactory {
         return new StatementWrapper();
     }
 
-    final StatementWrapper wrapStatement(ConnectionWrapper connectionWrapper, Statement parent) throws SQLException {
+    final StatementWrapper wrapStatement(Statement parent, Connection connection) throws SQLException {
         StatementWrapper wrapper = createStatementWrapper();
         wrapper.wrapperFactory = this;
-        wrapper.connectionWrapper = connectionWrapper;
         wrapper.parent = parent;
+        wrapper.connection = connection;
         wrapper.init();
         return wrapper;
     }
@@ -78,11 +78,11 @@ public class WrapperFactory {
         return new DatabaseMetaDataWrapper();
     }
 
-    final DatabaseMetaDataWrapper wrapDatabaseMetaData(ConnectionWrapper connectionWrapper, DatabaseMetaData parent) throws SQLException {
+    final DatabaseMetaDataWrapper wrapDatabaseMetaData(DatabaseMetaData parent, Connection connection) throws SQLException {
         DatabaseMetaDataWrapper wrapper = createDatabaseMetaDataWrapper();
         wrapper.wrapperFactory = this;
-        wrapper.connectionWrapper = connectionWrapper;
         wrapper.parent = parent;
+        wrapper.connection = connection;
         wrapper.init();
         return wrapper;
     }
@@ -107,7 +107,7 @@ public class WrapperFactory {
     final PreparedStatementWrapper wrapPreparedStatement(ConnectionWrapper connectionWrapper, PreparedStatement parent, String sql) throws SQLException {
         PreparedStatementWrapper wrapper = createPreparedStatementWrapper();
         wrapper.wrapperFactory = this;
-        wrapper.statementWrapper = wrapStatement(connectionWrapper, parent);
+        wrapper.statementWrapper = wrapStatement(parent, connectionWrapper);
         wrapper.parent = parent;
         wrapper.sql = sql;
         wrapper.init();
@@ -118,11 +118,11 @@ public class WrapperFactory {
         return new ResultSetWrapper();
     }
 
-    final ResultSetWrapper wrapResultSet(ResultSetType resultSetType, Statement statementWrapper, ResultSet parent) throws SQLException {
+    final ResultSetWrapper wrapResultSet(ResultSet parent, Statement statement, ResultSetType resultSetType) throws SQLException {
         ResultSetWrapper wrapper = createResultSetWrapper(resultSetType);
         wrapper.wrapperFactory = this;
-        wrapper.statementWrapper = statementWrapper;
         wrapper.parent = parent;
+        wrapper.statement = statement;
         wrapper.init();
         return wrapper;
     }

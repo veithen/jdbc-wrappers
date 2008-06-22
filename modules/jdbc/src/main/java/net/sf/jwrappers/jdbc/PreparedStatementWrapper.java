@@ -159,7 +159,7 @@ public class PreparedStatementWrapper extends AbstractWrapper<PreparedStatement>
 	 * {@inheritDoc}
 	 */
 	public ResultSet executeQuery(String sql) throws SQLException {
-		return wrapperFactory.wrapResultSet(ResultSetType.QUERY, this, statementWrapper.executeQuery(sql));
+		return wrapperFactory.wrapResultSet(statementWrapper.executeQuery(sql), this, ResultSetType.QUERY);
 	}
 	
 	/**
@@ -464,7 +464,7 @@ public class PreparedStatementWrapper extends AbstractWrapper<PreparedStatement>
 	 * {@inheritDoc}
 	 */
 	public ResultSet executeQuery() throws SQLException {
-		return wrapperFactory.wrapResultSet(ResultSetType.QUERY, this, parent.executeQuery());
+		return wrapperFactory.wrapResultSet(parent.executeQuery(), this, ResultSetType.QUERY);
 	}
 	
 	/**

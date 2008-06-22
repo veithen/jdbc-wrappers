@@ -1,6 +1,9 @@
 package net.sf.jwrappers.generator;
 
-public class MethodSignature implements Comparable<MethodSignature> {
+import net.sf.jwrappers.generator.model.ClassNameFormatter;
+import net.sf.jwrappers.generator.model.Imports;
+
+public class MethodSignature {
     private final String name;
     private final MType[] argumentTypes;
     
@@ -9,15 +12,20 @@ public class MethodSignature implements Comparable<MethodSignature> {
         this.argumentTypes = argumentTypes;
     }
 
-    public int compareTo(MethodSignature o) {
-        int c = name.compareToIgnoreCase(o.name);
-        if (c != 0) {
-            return c;
+    @Override
+    public String toString() {
+        StringBuilder buffer = new StringBuilder(name);
+        buffer.append('(');
+        boolean first = true;
+        for (MType type : argumentTypes) {
+            if (first) {
+                first = false;
+            } else {
+                buffer.append(", ");
+            }
+            buffer.append(type.toString(ClassNameFormatter.DEFAULT));
         }
-        c = argumentTypes.length - o.argumentTypes.length;
-        if (c != 0) {
-            return c;
-        }
-        return 0; // TODO
+        buffer.append(')');
+        return buffer.toString();
     }
 }

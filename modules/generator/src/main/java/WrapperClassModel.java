@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.sf.jwrappers.generator.Access;
@@ -28,11 +29,21 @@ public class WrapperClassModel {
     private Attribute wrapperFactoryAttribute;
     private Attribute targetAttribute;
     private MethodModel initMethod;
+    private List<Attribute> relations = new LinkedList<Attribute>();
     
     public WrapperClassModel(WrapperModel wrapperModel, Class<?> iface) {
         this.wrapperModel = wrapperModel;
         model = wrapperModel.getModel();
         targetClass = model.importClass(iface);
+    }
+    
+    public List<Attribute> getRelations() {
+        return relations;
+    }
+
+    public void addRelation(Class<?> clazz, String name) {
+        MClassType type = (MClassType)model.importType(clazz);
+        relations.add(getWrapperClass().createAttribute(Access.PACKAGE, name, type));
     }
     
     public ClassModel getWrapperClass() {
@@ -85,46 +96,25 @@ public class WrapperClassModel {
         
         buildUnwrapMethod();
         
-        Expression targetExpression = new AttributeExpression(Expression.SELF, targetAttribute);
         List<MethodModel> targetMethods = new ArrayList<MethodModel>(targetClass.getMethods());
         Collections.sort(targetMethods, new Comparator<MethodModel>() {
             public int compare(MethodModel o1, MethodModel o2) {
-                return o1.getSignature().compareTo(o2.getSignature());
+                return o1.getSignature().toString().compareTo(o2.getSignature().toString());
             }
         });
+        outer:
         for (MethodModel targetMethod : targetMethods) {
             MethodModel method = wrapperClass.overrideMethod(targetMethod);
-            JavadocModel javadoc = method.getJavadoc();
-            javadoc.addText("Delegate method for ");
-            javadoc.addLink(targetMethod);
-            javadoc.addText(".\n");
-            MethodInvocation invocation = new MethodInvocation(targetExpression, targetMethod);
-            for (Argument argument : method.getArguments()) {
-                invocation.addArgument(argument);
-            }
             MType returnType = method.getReturnType();
             if (returnType != null) {
-                Expression expression = invocation;
-                if (returnType instanceof MClassType) {
-                    ClassName returnClass = ((MClassType)returnType).getName();
-                    MethodModel wrapMethod = wrapperModel.getWrapMethod(returnClass);
-                    if (wrapMethod != null) {
-                        MethodInvocation wrapInvocation = new MethodInvocation(new AttributeExpression(Expression.SELF, wrapperFactoryAttribute), wrapMethod);
-                        wrapInvocation.addArgument(expression);
-                        expression = wrapInvocation;
-                        javadoc.addText("This method wraps the ");
-                        javadoc.addLink(returnClass);
-                        javadoc.addText(" object using\n");
-                        javadoc.addLink(wrapMethod);
-                        javadoc.addText(".\n");
+                for (Attribute relationAttribute : relations) {
+                    if (returnType.equals(relationAttribute.getType())) {
+                        buildRelationGetter(method, targetMethod, relationAttribute);
+                        continue outer;
                     }
                 }
-                method.getCode().addInstruction(new ReturnInstruction(expression));
-            } else {
-                method.getCode().addInstruction(invocation);
             }
-            javadoc.addText("\n");
-            javadoc.addText("{@inheritDoc}\n");
+            buildDelegateMethod(method, targetMethod);
         }
     }
     
@@ -135,5 +125,62 @@ public class WrapperClassModel {
         ifStatement.getIfClause().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, getTargetAttribute())));
         ifStatement.getElseClause().addInstruction(new SourceStatement("throw new IllegalStateException(\"unwrap not allowed\")"));
         unwrapMethod.getCode().addInstruction(ifStatement);
+    }
+    
+    private void buildRelationGetter(MethodModel method, MethodModel targetMethod, Attribute relationAttribute) {
+        JavadocModel javadoc = method.getJavadoc();
+        javadoc.addText("Delegate method for ");
+        javadoc.addLink(targetMethod);
+        javadoc.addText(".\n");
+        javadoc.addText("This method returns the ");
+        javadoc.addLink(wrapperModel.getWrapperClass(((MClassType)relationAttribute.getType()).getName()).getWrapperClass().getName());
+        javadoc.addText(" object that\n");
+        javadoc.addText("created this wrapper. For consistency reasons, it can't be\n");
+        javadoc.addText("overridden.\n");
+        javadoc.addText("\n");
+        javadoc.addText("{@inheritDoc}\n");
+        method.setFinal(true);
+        method.getCode().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, relationAttribute)));
+    }
+    
+    private void buildDelegateMethod(MethodModel method, MethodModel targetMethod) {
+        JavadocModel javadoc = method.getJavadoc();
+        javadoc.addText("Delegate method for ");
+        javadoc.addLink(targetMethod);
+        javadoc.addText(".\n");
+        MethodInvocation invocation = new MethodInvocation(new AttributeExpression(Expression.SELF, targetAttribute), targetMethod);
+        for (Argument argument : method.getArguments()) {
+            invocation.addArgument(argument);
+        }
+        MType returnType = method.getReturnType();
+        if (returnType != null) {
+            Expression expression = invocation;
+            if (returnType instanceof MClassType) {
+                ClassName returnClass = ((MClassType)returnType).getName();
+                MethodModel wrapMethod = wrapperModel.getWrapMethod(returnClass);
+                if (wrapMethod != null) {
+                    MethodInvocation wrapInvocation = new MethodInvocation(new AttributeExpression(Expression.SELF, wrapperFactoryAttribute), wrapMethod);
+                    wrapInvocation.addArgument(expression);
+                    for (Attribute relation : wrapperModel.getWrapperClass(returnClass).getRelations()) {
+                        if (relation.getType().equals(new MClassType(targetClass))) {
+                            wrapInvocation.addArgument(Expression.SELF);
+                        } else {
+                            wrapInvocation.addArgument(Expression.NULL); // TODO: not a sensible default value
+                        }
+                    }
+                    expression = wrapInvocation;
+                    javadoc.addText("This method wraps the ");
+                    javadoc.addLink(returnClass);
+                    javadoc.addText(" object using\n");
+                    javadoc.addLink(wrapMethod);
+                    javadoc.addText(".\n");
+                }
+            }
+            method.getCode().addInstruction(new ReturnInstruction(expression));
+        } else {
+            method.getCode().addInstruction(invocation);
+        }
+        javadoc.addText("\n");
+        javadoc.addText("{@inheritDoc}\n");
     }
 }

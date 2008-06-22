@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.jwrappers.generator.Access;
@@ -63,6 +64,10 @@ public class WrapperModel {
         return wrapperClass;
     }
     
+    public WrapperClassModel getWrapperClass(ClassName targetClassName) {
+        return wrapperClasses.get(targetClassName);
+    }
+    
     public MethodModel getWrapMethod(ClassName targetClassName) {
         MethodModel wrapMethod = wrapMethods.get(targetClassName);
         if (wrapMethod == null) {
@@ -76,7 +81,11 @@ public class WrapperModel {
             createWrapperMethod.setAccess(Access.PROTECTED);
             createWrapperMethod.setReturnType(wrapperClassType);
             createWrapperMethod.getCode().addInstruction(new ReturnInstruction(new NewExpression(wrapperClassType)));
+            
             wrapMethod = wrapperFactory.createMethod("wrap" + targetClassName.getUnqualifiedName());
+            List<Attribute> relations = wrapperClass.getRelations();
+            wrapMethod.setAccess(relations.isEmpty() ? Access.PUBLIC : Access.PACKAGE);
+            wrapMethod.setFinal(true);
             wrapMethod.setReturnType(wrapperClassType);
             Argument targetArgument = wrapMethod.createArgument("parent", new MClassType(wrapperClass.getTargetClass()));
             wrapMethod.addException(defaultException);
@@ -86,6 +95,10 @@ public class WrapperModel {
             VariableExpression wrapperVariable = new VariableExpression(wrapperVariableDeclaration);
             code.addInstruction(new Assignment(new AttributeExpression(wrapperVariable, wrapperClass.getWrapperFactoryAttribute()), Expression.SELF));
             code.addInstruction(new Assignment(new AttributeExpression(wrapperVariable, wrapperClass.getTargetAttribute()), new ArgumentExpression(targetArgument)));
+            for (Attribute relation : relations) {
+                Argument relationArgument = wrapMethod.createArgument(relation.getName(), relation.getType());
+                code.addInstruction(new Assignment(new AttributeExpression(wrapperVariable, relation), new ArgumentExpression(relationArgument)));
+            }
             code.addInstruction(new MethodInvocation(wrapperVariable, wrapperClass.getInitMethod()));
             code.addInstruction(new ReturnInstruction(wrapperVariable));
             wrapMethods.put(targetClassName, wrapMethod);

@@ -3,6 +3,7 @@ package net.sf.jwrappers.generator;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.jwrappers.generator.model.ClassNameFormatter;
 import net.sf.jwrappers.generator.model.Imports;
 
 public class PrimitiveType implements MType {
@@ -27,7 +28,7 @@ public class PrimitiveType implements MType {
         // Nothing to do
     }
 
-    public String toString(Imports imports) {
+    public String toString(ClassNameFormatter classNameFormatter) {
         return name;
     }
 }

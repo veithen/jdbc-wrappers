@@ -1,5 +1,6 @@
 package net.sf.jwrappers.generator;
 
+import net.sf.jwrappers.generator.model.ClassNameFormatter;
 import net.sf.jwrappers.generator.model.Imports;
 
 public class ArrayType implements MType {
@@ -13,7 +14,7 @@ public class ArrayType implements MType {
         componentType.collectImports(imports);
     }
 
-    public String toString(Imports imports) {
-        return componentType.toString(imports) + "[]";
+    public String toString(ClassNameFormatter classNameFormatter) {
+        return componentType.toString(classNameFormatter) + "[]";
     }
 }

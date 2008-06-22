@@ -27,7 +27,7 @@ import java.sql.SQLException;
  * @version $Id$
  */
 public class DatabaseMetaDataWrapper extends AbstractWrapper<DatabaseMetaData> implements DatabaseMetaData, HasConnection {
-    ConnectionWrapper connectionWrapper;
+    Connection connection;
     
     /**
      * Delegate method for {@link DatabaseMetaData#allProceduresAreCallable()}.
@@ -155,7 +155,7 @@ public class DatabaseMetaDataWrapper extends AbstractWrapper<DatabaseMetaData> i
      * {@inheritDoc}
      */
     public final Connection getConnection() throws SQLException {
-        return connectionWrapper;
+        return connection;
     }
     
     /**

@@ -24,11 +24,11 @@ public class Test {
         wrapperModel.setDefaultExceptionType(SQLException.class, "if a database access error occurs");
         wrapperModel.addInterface(DataSource.class);
         wrapperModel.addInterface(Connection.class);
-        wrapperModel.addInterface(DatabaseMetaData.class);
-        wrapperModel.addInterface(Statement.class);
+        wrapperModel.addInterface(DatabaseMetaData.class).addRelation(Connection.class, "connection");
+        wrapperModel.addInterface(Statement.class).addRelation(Connection.class, "connection");
         wrapperModel.addInterface(PreparedStatement.class);
         wrapperModel.addInterface(CallableStatement.class);
-        wrapperModel.addInterface(ResultSet.class);
+        wrapperModel.addInterface(ResultSet.class).addRelation(Statement.class, "statement");
         
         wrapperModel.build();
         

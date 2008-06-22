@@ -40,7 +40,7 @@ import java.util.Map;
  * @version $Id$
  */
 public class ResultSetWrapper extends AbstractWrapper<ResultSet> implements ResultSet {
-	Statement statementWrapper;
+	Statement statement;
 	
 	/**
 	 * Delegate method for {@link ResultSet#absolute(int)}.
@@ -566,7 +566,7 @@ public class ResultSetWrapper extends AbstractWrapper<ResultSet> implements Resu
 	 * {@inheritDoc}
 	 */
 	public final Statement getStatement() throws SQLException {
-		return statementWrapper;
+		return statement;
 	}
 	
 	/**
