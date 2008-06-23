@@ -37,6 +37,7 @@
 	</dependencies>
 	
     <modules>
+        <module>modules/generator</module>
         <module>modules/jdbc</module>
         <module>modules/jms</module>
     </modules>

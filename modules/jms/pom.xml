@@ -25,12 +25,18 @@
 	<artifactId>jwrappers-jms</artifactId>
 	<name>Java API Wrappers for JMS</name>
 	<packaging>jar</packaging>
+    
+    <properties>
+        <jms.groupId>org.apache.geronimo.specs</jms.groupId>
+        <jms.artifactId>geronimo-jms_1.1_spec</jms.artifactId>
+        <jms.version>1.1.1</jms.version>
+    </properties>
 	
 	<dependencies>
         <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jms_1.1_spec</artifactId>
-            <version>1.1.1</version>
+            <groupId>${jms.groupId}</groupId>
+            <artifactId>${jms.artifactId}</artifactId>
+            <version>${jms.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -39,6 +45,64 @@
             <version>0.3.1</version>
             <scope>test</scope>
         </dependency>
-	</dependencies>
-</project>	
-	
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${jms.groupId}</groupId>
+                                    <artifactId>${jms.artifactId}</artifactId>
+                                    <version>${jms.version}</version>
+                                    <classifier>sources</classifier>
+                                    <outputDirectory>target/jms-api/src</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generateModel</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                        <configuration>
+                            <sourcepath>target/jms-api/src</sourcepath>
+                            <reportOutputDirectory>target/jms-api</reportOutputDirectory>
+                            <docletArtifacts>
+                                <docletArtifact>
+                                    <groupId>${pom.groupId}</groupId>
+                                    <artifactId>jwrappers-generator</artifactId>
+                                    <version>${pom.version}</version>
+                                    <!-- classifier>jar-with-dependencies</classifier --> <!-- TODO: doesn't work! -->
+                                </docletArtifact>
+                                <dependency>
+                                    <groupId>commons-lang</groupId>
+                                    <artifactId>commons-lang</artifactId>
+                                    <version>2.3</version>
+                                </dependency>
+                            </docletArtifacts>
+                            <doclet>net.sf.jwrappers.generator.doclet.ModelGeneratorDoclet</doclet>
+                            <additionalparam>-out ${project.build.directory}/jms-api/model</additionalparam>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

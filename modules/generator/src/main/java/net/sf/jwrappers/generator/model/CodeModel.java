@@ -1,5 +1,6 @@
 package net.sf.jwrappers.generator.model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import net.sf.jwrappers.generator.model.code.Expression;
 import net.sf.jwrappers.generator.model.code.Instruction;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 
-public class CodeModel {
+public class CodeModel implements Serializable {
     private final List<Instruction> instructions = new LinkedList<Instruction>();
     
     public void addInstruction(Instruction instruction) {

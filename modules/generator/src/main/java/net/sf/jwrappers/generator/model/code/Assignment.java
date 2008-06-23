@@ -3,6 +3,7 @@ package net.sf.jwrappers.generator.model.code;
 import net.sf.jwrappers.generator.model.Imports;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 
+// TODO: should be an expression
 public class Assignment implements Instruction {
     private final LValue lvalue;
     private final Expression expression;

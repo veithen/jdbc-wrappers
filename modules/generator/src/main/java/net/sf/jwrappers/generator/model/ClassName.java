@@ -1,8 +1,10 @@
 package net.sf.jwrappers.generator.model;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class ClassName {
+public class ClassName implements Serializable {
     private final String packageName;
     private final String unqualifiedName;
     

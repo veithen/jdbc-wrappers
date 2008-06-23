@@ -1,5 +1,6 @@
 package net.sf.jwrappers.generator.model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import net.sf.jwrappers.generator.model.javadoc.JavadocModel;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 import net.sf.jwrappers.generator.writer.IndentCodeWriter;
 
-public class ClassModel {
+public class ClassModel implements Serializable {
     private final JavadocModel javadoc = new JavadocModel();
 	private ClassName name;
 	private MType superClass;

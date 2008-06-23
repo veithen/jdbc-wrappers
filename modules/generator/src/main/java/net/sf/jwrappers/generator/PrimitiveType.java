@@ -7,7 +7,15 @@ import net.sf.jwrappers.generator.model.ClassNameFormatter;
 import net.sf.jwrappers.generator.model.Imports;
 
 public class PrimitiveType extends MType {
-    private static final Map<Class<?>,PrimitiveType> primitiveTypeMap = new HashMap<Class<?>,PrimitiveType>();
+    private static final String[] types = { "boolean", "byte", "char", "double", "float", "int", "long", "short" };
+    
+    private static final Map<String,PrimitiveType> primitiveTypeFromString = new HashMap<String,PrimitiveType>();
+    
+    static {
+        for (String type : types) {
+            primitiveTypeFromString.put(type, new PrimitiveType(type));
+        }
+    }
     
     private final String name;
     
@@ -16,12 +24,18 @@ public class PrimitiveType extends MType {
     }
     
     public static PrimitiveType get(Class<?> clazz) {
-        PrimitiveType primitiveType = primitiveTypeMap.get(clazz);
-        if (primitiveType == null) {
-            primitiveType = new PrimitiveType(clazz.getName());
-            primitiveTypeMap.put(clazz, primitiveType);
+        if (!clazz.isPrimitive()) {
+            throw new IllegalArgumentException();
         }
-        return primitiveType;
+        return get(clazz.getName());
+    }
+    
+    public static PrimitiveType get(String type) {
+        PrimitiveType result = primitiveTypeFromString.get(type);
+        if (result == null) {
+            throw new IllegalArgumentException("'" + type + "' is not a primitive type");
+        }
+        return result;
     }
 
     @Override

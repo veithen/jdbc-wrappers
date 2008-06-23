@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +16,7 @@ import net.sf.jwrappers.generator.MType;
 import net.sf.jwrappers.generator.PrimitiveType;
 import net.sf.jwrappers.generator.writer.CharStreamCodeWriter;
 
-public class JavaModel {
+public class JavaModel implements Serializable {
     private final List<ClassModel> classes = new LinkedList<ClassModel>();
     
     public List<ClassModel> getClasses() {

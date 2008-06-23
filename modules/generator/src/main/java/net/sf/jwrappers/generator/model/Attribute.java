@@ -1,10 +1,12 @@
 package net.sf.jwrappers.generator.model;
 
+import java.io.Serializable;
+
 import net.sf.jwrappers.generator.Access;
 import net.sf.jwrappers.generator.MType;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 
-public class Attribute {
+public class Attribute implements Serializable {
     private Access access = Access.PRIVATE;
     private String name;
     private MType type;

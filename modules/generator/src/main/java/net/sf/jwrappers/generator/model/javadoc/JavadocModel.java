@@ -1,5 +1,6 @@
 package net.sf.jwrappers.generator.model.javadoc;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import net.sf.jwrappers.generator.model.Imports;
 import net.sf.jwrappers.generator.model.MethodModel;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 
-public class JavadocModel {
+public class JavadocModel implements Serializable {
     private static interface Piece {
         void generate(JavadocWriter out, Imports imports);
     }
