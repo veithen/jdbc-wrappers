@@ -33,9 +33,9 @@ public class WrapperClassModel {
     private final Holder<Attribute> baseWrapperAttributeHolder = new Holder<Attribute>();
     private final Holder<MethodModel> initMethodHolder = new Holder<MethodModel>();
     
-    public WrapperClassModel(WrapperModel wrapperModel, Class<?> iface) {
+    public WrapperClassModel(WrapperModel wrapperModel, JavaModel javaModel, Class<?> iface) {
         this.wrapperModel = wrapperModel;
-        javaModel = wrapperModel.getJavaModel();
+        this.javaModel = javaModel;
         targetClass = javaModel.importClass(iface);
     }
     

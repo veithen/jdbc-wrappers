@@ -10,17 +10,53 @@ import javax.jms.ServerSessionPool;
 import javax.jms.Session;
 import javax.jms.Topic;
 
-public class ConnectionWrapper extends AbstractWrapper<Connection> implements Connection {
+public class ConnectionWrapper implements Connection {
+    WrapperFactory wrapperFactory;
+    Connection parent;
+
+    /**
+     * Wrapper initialization method. This method is executed once before any
+     * delegate method is called on the wrapper. Subclasses can override this
+     * method to do initialization work. The default implementation does
+     * nothing.
+     * @throws JMSException if an error occurs
+     */
+    protected void init() throws JMSException {
+    }
+
+    public Connection unwrap() {
+        if (wrapperFactory.isAllowUnwrap()) {
+            return parent;
+        } else {
+            throw new IllegalStateException("unwrap not allowed");
+        }
+    }
+
+    /**
+     * Delegate method for {@link Connection#close()}.
+     * 
+     * {@inheritDoc}
+     */
     public void close() throws JMSException {
         parent.close();
     }
 
-    public ConnectionConsumer createConnectionConsumer(Destination destination, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException {
-        return parent.createConnectionConsumer(destination, messageSelector, sessionPool, maxMessages);
+    /**
+     * Delegate method for {@link Connection#createConnectionConsumer(Destination, String, ServerSessionPool, int)}.
+     * 
+     * {@inheritDoc}
+     */
+    public ConnectionConsumer createConnectionConsumer(Destination arg0, String arg1, ServerSessionPool arg2, int arg3) throws JMSException {
+        return parent.createConnectionConsumer(arg0, arg1, arg2, arg3);
     }
 
-    public ConnectionConsumer createDurableConnectionConsumer(Topic topic, String subscriptionName, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException {
-        return parent.createDurableConnectionConsumer(topic, subscriptionName, messageSelector, sessionPool, maxMessages);
+    /**
+     * Delegate method for {@link Connection#createDurableConnectionConsumer(Topic, String, String, ServerSessionPool, int)}.
+     * 
+     * {@inheritDoc}
+     */
+    public ConnectionConsumer createDurableConnectionConsumer(Topic arg0, String arg1, String arg2, ServerSessionPool arg3, int arg4) throws JMSException {
+        return parent.createDurableConnectionConsumer(arg0, arg1, arg2, arg3, arg4);
     }
 
     /**
@@ -30,8 +66,8 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
      * 
      * {@inheritDoc}
      */
-    public Session createSession(boolean transacted, int acknowledgeMode) throws JMSException {
-        return wrapperFactory.wrapSession(parent.createSession(transacted, acknowledgeMode));
+    public Session createSession(boolean arg0, int arg1) throws JMSException {
+        return wrapperFactory.wrapSession(parent.createSession(arg0, arg1));
     }
 
     /**
@@ -52,6 +88,11 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
         return parent.getExceptionListener();
     }
 
+    /**
+     * Delegate method for {@link Connection#getMetaData()}.
+     * 
+     * {@inheritDoc}
+     */
     public ConnectionMetaData getMetaData() throws JMSException {
         return parent.getMetaData();
     }
@@ -61,8 +102,8 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
      * 
      * {@inheritDoc}
      */
-    public void setClientID(String clientID) throws JMSException {
-        parent.setClientID(clientID);
+    public void setClientID(String arg0) throws JMSException {
+        parent.setClientID(arg0);
     }
 
     /**
@@ -70,8 +111,8 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
      * 
      * {@inheritDoc}
      */
-    public void setExceptionListener(ExceptionListener listener) throws JMSException {
-        parent.setExceptionListener(listener);
+    public void setExceptionListener(ExceptionListener arg0) throws JMSException {
+        parent.setExceptionListener(arg0);
     }
 
     /**

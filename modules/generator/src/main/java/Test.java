@@ -10,13 +10,16 @@ import java.sql.Statement;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueReceiver;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TopicConnection;
 import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
+import javax.jms.TopicSubscriber;
 import javax.sql.DataSource;
 
 public class Test {
@@ -31,8 +34,7 @@ public class Test {
         wrapperModel.addInterface(PreparedStatement.class);
         wrapperModel.addInterface(CallableStatement.class);
         wrapperModel.addInterface(ResultSet.class).addRelation(Statement.class, "statement");
-        wrapperModel.build();
-        wrapperModel.getJavaModel().generate(new File("out"));
+        wrapperModel.generate(new File("out"));
     }
     
     public static void main(String[] args) throws IOException {
@@ -48,7 +50,9 @@ public class Test {
         wrapperModel.addInterface(Session.class);
         wrapperModel.addInterface(QueueSession.class);
         wrapperModel.addInterface(TopicSession.class);
-        wrapperModel.build();
-        wrapperModel.getJavaModel().generate(new File("out"));
+        wrapperModel.addInterface(MessageConsumer.class);
+        wrapperModel.addInterface(QueueReceiver.class);
+        wrapperModel.addInterface(TopicSubscriber.class);
+        wrapperModel.generate(new File("out"));
     }
 }

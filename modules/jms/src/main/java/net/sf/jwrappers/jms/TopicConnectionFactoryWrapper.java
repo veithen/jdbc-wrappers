@@ -1,29 +1,41 @@
-/**
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 package net.sf.jwrappers.jms;
 
+import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.TopicConnection;
 import javax.jms.TopicConnectionFactory;
 
-/**
- * Base class for {@link TopicConnectionFactory} wrappers.
- * 
- * @author Andreas Veithen
- * @version $Id$
- */
-public class TopicConnectionFactoryWrapper extends AbstractConnectionFactoryWrapper<TopicConnectionFactory> implements TopicConnectionFactory {
+public class TopicConnectionFactoryWrapper implements TopicConnectionFactory {
+    WrapperFactory wrapperFactory;
+    TopicConnectionFactory parent;
+    ConnectionFactoryWrapper baseWrapper;
+
+    /**
+     * Wrapper initialization method. This method is executed once before any
+     * delegate method is called on the wrapper. Subclasses can override this
+     * method to do initialization work. The default implementation does
+     * nothing.
+     * @throws JMSException if an error occurs
+     */
+    protected void init() throws JMSException {
+    }
+
+    public TopicConnectionFactory unwrap() {
+        if (wrapperFactory.isAllowUnwrap()) {
+            return parent;
+        } else {
+            throw new IllegalStateException("unwrap not allowed");
+        }
+    }
+
+    public Connection createConnection() throws JMSException {
+        return baseWrapper.createConnection();
+    }
+
+    public Connection createConnection(String arg0, String arg1) throws JMSException {
+        return baseWrapper.createConnection(arg0, arg1);
+    }
+
     /**
      * Delegate method for {@link TopicConnectionFactory#createTopicConnection()}.
      * This method wraps the {@link TopicConnection} object using
@@ -32,8 +44,7 @@ public class TopicConnectionFactoryWrapper extends AbstractConnectionFactoryWrap
      * {@inheritDoc}
      */
     public TopicConnection createTopicConnection() throws JMSException {
-        // TODO
-        return parent.createTopicConnection();
+        return wrapperFactory.wrapTopicConnection(parent.createTopicConnection());
     }
 
     /**
@@ -43,8 +54,7 @@ public class TopicConnectionFactoryWrapper extends AbstractConnectionFactoryWrap
      * 
      * {@inheritDoc}
      */
-    public TopicConnection createTopicConnection(String userName, String password) throws JMSException {
-        // TODO
-        return parent.createTopicConnection(userName, password);
+    public TopicConnection createTopicConnection(String arg0, String arg1) throws JMSException {
+        return wrapperFactory.wrapTopicConnection(parent.createTopicConnection(arg0, arg1));
     }
 }

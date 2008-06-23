@@ -19,7 +19,7 @@ public class JEECompliantSessionWrapper extends SessionWrapper {
 
     @Override
     public void setMessageListener(MessageListener listener) throws JMSException {
-        String msg = "getMessageListener(MessageListener) not allowed in a JEE environment";
+        String msg = "setMessageListener(MessageListener) not allowed in a JEE environment";
         if (warnOnly) {
             log.warn(msg);
             super.setMessageListener(listener);

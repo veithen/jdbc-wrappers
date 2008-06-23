@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,8 +13,8 @@ import net.sf.jwrappers.generator.model.Attribute;
 import net.sf.jwrappers.generator.model.ClassModel;
 import net.sf.jwrappers.generator.model.ClassName;
 import net.sf.jwrappers.generator.model.CodeModel;
-import net.sf.jwrappers.generator.model.MethodModel;
 import net.sf.jwrappers.generator.model.JavaModel;
+import net.sf.jwrappers.generator.model.MethodModel;
 import net.sf.jwrappers.generator.model.code.ArgumentExpression;
 import net.sf.jwrappers.generator.model.code.Assignment;
 import net.sf.jwrappers.generator.model.code.AttributeExpression;
@@ -33,10 +35,6 @@ public class WrapperModel {
     private Map<ClassName,WrapperClassModel> wrapperClasses = new LinkedHashMap<ClassName,WrapperClassModel>();
     private Map<ClassName,MethodModel> wrapMethods = new HashMap<ClassName,MethodModel>();
     
-    public JavaModel getJavaModel() {
-        return javaModel;
-    }
-
     public String getPackageName() {
         return packageName;
     }
@@ -59,7 +57,7 @@ public class WrapperModel {
     }
     
     public WrapperClassModel addInterface(Class<?> iface) {
-        WrapperClassModel wrapperClass = new WrapperClassModel(this, iface);
+        WrapperClassModel wrapperClass = new WrapperClassModel(this, javaModel, iface);
         wrapperClasses.put(wrapperClass.getTargetClass().getName(), wrapperClass);
         return wrapperClass;
     }
@@ -99,6 +97,12 @@ public class WrapperModel {
                 Argument relationArgument = wrapMethod.createArgument(relation.getName(), relation.getType());
                 code.addInstruction(new Assignment(new AttributeExpression(wrapperVariable, relation), new ArgumentExpression(relationArgument)));
             }
+            WrapperClassModel baseWrapper = wrapperClass.getBaseWrapper();
+            if (baseWrapper != null) {
+                MethodInvocation invocation = new MethodInvocation(Expression.SELF, getWrapMethod(baseWrapper.getTargetClass().getName()));
+                invocation.addArgument(new ArgumentExpression(targetArgument));
+                code.addInstruction(new Assignment(new AttributeExpression(wrapperVariable, wrapperClass.getBaseWrapperAttribute()), invocation));
+            }
             code.addInstruction(new MethodInvocation(wrapperVariable, wrapperClass.getInitMethod()));
             code.addInstruction(new ReturnInstruction(wrapperVariable));
             wrapMethods.put(targetClassName, wrapMethod);
@@ -127,11 +131,12 @@ public class WrapperModel {
         return isAllowUnwrapMethod;
     }
 
-    public void build() {
+    public void generate(File outputDir) throws IOException {
         for (WrapperClassModel wrapperClass : wrapperClasses.values()) {
             // Make sure that the wrap method for the class has been generated
             getWrapMethod(wrapperClass.getTargetClass().getName());
             wrapperClass.build();
         }
+        javaModel.generate(outputDir);
     }
 }

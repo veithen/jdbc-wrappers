@@ -59,6 +59,7 @@ public class JEECompliantTest {
         topicConnection = wrapperFactory.wrapTopicConnectionFactory(new MockTopicConnectionFactory(destinationManager, configurationManager)).createTopicConnection();
         connection = wrapperFactory.wrapConnectionFactory(new MockConnectionFactory(destinationManager, configurationManager)).createConnection();
         session = connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
+        messageConsumer = session.createConsumer(queue);
         wrapperFactory.setAllowUnwrap(true);
         sessionPool = new MockServerSessionPool((MockConnection)((ConnectionWrapper)connection).unwrap());
         wrapperFactory.setAllowUnwrap(false);
