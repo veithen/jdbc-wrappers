@@ -12,7 +12,7 @@ import net.sf.jwrappers.generator.model.Attribute;
 import net.sf.jwrappers.generator.model.ClassModel;
 import net.sf.jwrappers.generator.model.ClassName;
 import net.sf.jwrappers.generator.model.MethodModel;
-import net.sf.jwrappers.generator.model.Model;
+import net.sf.jwrappers.generator.model.JavaModel;
 import net.sf.jwrappers.generator.model.code.AttributeExpression;
 import net.sf.jwrappers.generator.model.code.Expression;
 import net.sf.jwrappers.generator.model.code.IfStatement;
@@ -23,7 +23,7 @@ import net.sf.jwrappers.generator.model.javadoc.JavadocModel;
 
 public class WrapperClassModel {
     private final WrapperModel wrapperModel;
-    private final Model model;
+    private final JavaModel javaModel;
     private final ClassModel targetClass;
     private final List<Attribute> relations = new LinkedList<Attribute>();
     private final Holder<ClassModel> wrapperClassHolder = new Holder<ClassModel>();
@@ -35,8 +35,8 @@ public class WrapperClassModel {
     
     public WrapperClassModel(WrapperModel wrapperModel, Class<?> iface) {
         this.wrapperModel = wrapperModel;
-        model = wrapperModel.getModel();
-        targetClass = model.importClass(iface);
+        javaModel = wrapperModel.getJavaModel();
+        targetClass = javaModel.importClass(iface);
     }
     
     public ClassModel getTargetClass() {
@@ -48,13 +48,13 @@ public class WrapperClassModel {
     }
 
     public void addRelation(Class<?> clazz, String name) {
-        MClassType type = (MClassType)model.importType(clazz);
+        MClassType type = (MClassType)javaModel.importType(clazz);
         relations.add(getWrapperClass().createAttribute(Access.PACKAGE, name, type));
     }
     
     public ClassModel getWrapperClass() {
         if (!wrapperClassHolder.isSet()) {
-            ClassModel wrapperClass = model.createClass(new ClassName(wrapperModel.getPackageName(), targetClass.getName().getUnqualifiedName() + "Wrapper"));
+            ClassModel wrapperClass = javaModel.createClass(new ClassName(wrapperModel.getPackageName(), targetClass.getName().getUnqualifiedName() + "Wrapper"));
             wrapperClass.addInterface(new MClassType(targetClass));
             wrapperClassHolder.set(wrapperClass);
         }
@@ -150,17 +150,21 @@ public class WrapperClassModel {
         
         outer:
         for (MethodModel targetMethod : sortMethods(targetClass.getMethods())) {
-            MethodModel method = wrapperClass.overrideMethod(targetMethod);
-            MType returnType = method.getReturnType();
-            if (returnType != null) {
-                for (Attribute relationAttribute : relations) {
-                    if (returnType.equals(relationAttribute.getType())) {
-                        buildRelationGetter(method, targetMethod, relationAttribute);
-                        continue outer;
+            // The method might already be defined because the interface redeclares a method
+            // already defined in an interface it extends.
+            if (wrapperClass.getMethod(targetMethod.getSignature()) == null) {
+                MethodModel method = wrapperClass.overrideMethod(targetMethod);
+                MType returnType = method.getReturnType();
+                if (returnType != null) {
+                    for (Attribute relationAttribute : relations) {
+                        if (returnType.equals(relationAttribute.getType())) {
+                            buildRelationGetter(method, targetMethod, relationAttribute);
+                            continue outer;
+                        }
                     }
                 }
+                buildDelegateMethod(method, targetMethod);
             }
-            buildDelegateMethod(method, targetMethod);
         }
     }
     

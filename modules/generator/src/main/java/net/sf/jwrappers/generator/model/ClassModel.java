@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.sf.jwrappers.generator.Access;
 import net.sf.jwrappers.generator.MType;
+import net.sf.jwrappers.generator.MethodSignature;
 import net.sf.jwrappers.generator.model.javadoc.JavadocModel;
 import net.sf.jwrappers.generator.writer.CodeWriter;
 import net.sf.jwrappers.generator.writer.IndentCodeWriter;
@@ -82,6 +83,15 @@ public class ClassModel {
 	
 	public List<MethodModel> getMethods() {
 	    return methods;
+	}
+	
+	public MethodModel getMethod(MethodSignature signature) {
+	    for (MethodModel method : methods) {
+	        if (method.getSignature().equals(signature)) {
+	            return method;
+	        }
+	    }
+	    return null;
 	}
 	
 	public void collectImports(Imports imports) {

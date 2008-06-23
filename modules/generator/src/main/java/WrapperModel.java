@@ -12,7 +12,7 @@ import net.sf.jwrappers.generator.model.ClassModel;
 import net.sf.jwrappers.generator.model.ClassName;
 import net.sf.jwrappers.generator.model.CodeModel;
 import net.sf.jwrappers.generator.model.MethodModel;
-import net.sf.jwrappers.generator.model.Model;
+import net.sf.jwrappers.generator.model.JavaModel;
 import net.sf.jwrappers.generator.model.code.ArgumentExpression;
 import net.sf.jwrappers.generator.model.code.Assignment;
 import net.sf.jwrappers.generator.model.code.AttributeExpression;
@@ -24,7 +24,7 @@ import net.sf.jwrappers.generator.model.code.VariableDeclaration;
 import net.sf.jwrappers.generator.model.code.VariableExpression;
 
 public class WrapperModel {
-    private final Model model = new Model();
+    private final JavaModel javaModel = new JavaModel();
     private String packageName;
     private MClassType defaultException;
     private String defaultExceptionDescription;
@@ -33,8 +33,8 @@ public class WrapperModel {
     private Map<ClassName,WrapperClassModel> wrapperClasses = new LinkedHashMap<ClassName,WrapperClassModel>();
     private Map<ClassName,MethodModel> wrapMethods = new HashMap<ClassName,MethodModel>();
     
-    public Model getModel() {
-        return model;
+    public JavaModel getJavaModel() {
+        return javaModel;
     }
 
     public String getPackageName() {
@@ -54,7 +54,7 @@ public class WrapperModel {
     }
 
     public void setDefaultExceptionType(Class<?> defaultExceptionType, String description) {
-        defaultException = (MClassType)model.importType(defaultExceptionType);
+        defaultException = (MClassType)javaModel.importType(defaultExceptionType);
         defaultExceptionDescription = description;
     }
     
@@ -108,16 +108,16 @@ public class WrapperModel {
     
     public ClassModel getWrapperFactory() {
         if (wrapperFactory == null) {
-            wrapperFactory = model.createClass(new ClassName(packageName, "WrapperFactory"));
+            wrapperFactory = javaModel.createClass(new ClassName(packageName, "WrapperFactory"));
             wrapperFactory.getJavadoc().addText("Wrapper factory base class.");
-            Attribute allowUnwrapAttribute = wrapperFactory.createAttribute("allowUnwrap", model.importType(Boolean.TYPE));
+            Attribute allowUnwrapAttribute = wrapperFactory.createAttribute("allowUnwrap", javaModel.importType(Boolean.TYPE));
             isAllowUnwrapMethod = wrapperFactory.createMethod("isAllowUnwrap");
             isAllowUnwrapMethod.setSynchonized(true);
-            isAllowUnwrapMethod.setReturnType(model.importType(Boolean.TYPE));
+            isAllowUnwrapMethod.setReturnType(javaModel.importType(Boolean.TYPE));
             isAllowUnwrapMethod.getCode().addInstruction(new ReturnInstruction(new AttributeExpression(Expression.SELF, allowUnwrapAttribute)));
             MethodModel setAllowUnwrapMethod = wrapperFactory.createMethod("setAllowUnwrap");
             setAllowUnwrapMethod.setSynchonized(true);
-            Argument allowUnwrapArgument = setAllowUnwrapMethod.createArgument("allowUnwrap", model.importType(Boolean.TYPE));
+            Argument allowUnwrapArgument = setAllowUnwrapMethod.createArgument("allowUnwrap", javaModel.importType(Boolean.TYPE));
             setAllowUnwrapMethod.getCode().addInstruction(new Assignment(new AttributeExpression(Expression.SELF, allowUnwrapAttribute), new ArgumentExpression(allowUnwrapArgument)));
         }
         return wrapperFactory;
@@ -129,6 +129,7 @@ public class WrapperModel {
 
     public void build() {
         for (WrapperClassModel wrapperClass : wrapperClasses.values()) {
+            // Make sure that the wrap method for the class has been generated
             getWrapMethod(wrapperClass.getTargetClass().getName());
             wrapperClass.build();
         }
