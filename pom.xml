@@ -17,10 +17,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.jwrappers</groupId>
-	<artifactId>jwrappers-parent</artifactId>
+	<artifactId>jwrappers-jdbc</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<name>Java API Wrappers</name>
-	<packaging>pom</packaging>
+	<name>Java API Wrappers for JDBC</name>
+	<packaging>jar</packaging>
 	
 	<dependencies>
 		<dependency>
@@ -34,11 +34,13 @@
 			<version>4.4</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>net.sf.springderby</groupId>
+            <artifactId>spring-derby</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
-	
-    <modules>
-        <module>modules/jdbc</module>
-    </modules>
     
 	<build>
 		<plugins>
