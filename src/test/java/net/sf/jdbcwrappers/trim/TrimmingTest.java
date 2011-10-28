@@ -47,7 +47,7 @@ public class TrimmingTest {
 		List<OnlineAction> afterCreationActions = new LinkedList<OnlineAction>();
 		{
 			ExecuteSqlScriptsAction action = new ExecuteSqlScriptsAction();
-			action.setScript(new ClassPathResource("/net/sf/jwrappers/jdbc/trim/schema.sql"));
+			action.setScript(new ClassPathResource("/net/sf/jdbcwrappers/trim/schema.sql"));
 			afterCreationActions.add(action);
 		}
 		{

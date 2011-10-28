@@ -31,7 +31,7 @@ public class NullTypeTest {
 		factory.setCreate(true);
 		factory.setBeforeStartupAction(new DeleteDatabaseAction());
 		ExecuteSqlScriptsAction afterCreationAction = new ExecuteSqlScriptsAction();
-		afterCreationAction.setScript(new ClassPathResource("/net/sf/jwrappers/jdbc/nulltype/schema.sql"));
+		afterCreationAction.setScript(new ClassPathResource("/net/sf/jdbcwrappers/nulltype/schema.sql"));
 		factory.setAfterCreationAction(afterCreationAction);
 		factory.setAfterShutdownAction(new DeleteDatabaseAction());
 		factory.afterPropertiesSet();
