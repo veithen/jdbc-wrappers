@@ -15,138 +15,137 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.sf.jdbcwrappers</groupId>
-	<artifactId>jdbc-wrappers</artifactId>
-	<version>0.1-SNAPSHOT</version>
-	<name>JDBC Wrappers</name>
-	<packaging>jar</packaging>
-	
-	<dependencies>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.0.4</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.4</version>
-			<scope>test</scope>
-		</dependency>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.sf.jdbcwrappers</groupId>
+    <artifactId>jdbc-wrappers</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <name>JDBC Wrappers</name>
+    <packaging>jar</packaging>
+    
+    <dependencies>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>net.sf.springderby</groupId>
             <artifactId>spring-derby</artifactId>
             <version>0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
-	</dependencies>
+    </dependencies>
     
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>retrotranslator-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>translate-project</goal>
-						</goals>
-						<configuration>
-							<classifier>jdk14</classifier>
-							<attach>true</attach>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-	
-	<reporting>
-		<plugins>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<links>
-						<link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
-					</links>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<configuration>
-					<configLocation>checkstyle.xml</configLocation>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</reporting>
-	
-	<repositories>
-		<repository>
-			<id>spring-derby</id>
-			<url>http://spring-derby.sourceforge.net/repository</url>
-			<layout>default</layout>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	
-	<url>http://jdbc-wrappers.sourceforge.net/</url>
-	
-	<inceptionYear>2008</inceptionYear>
-	
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>retrotranslator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>translate-project</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>jdk14</classifier>
+                            <attach>true</attach>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <links>
+                        <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
+                    </links>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
+    
+    <repositories>
+        <repository>
+            <id>spring-derby</id>
+            <url>http://spring-derby.sourceforge.net/repository</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    
+    <url>http://jdbc-wrappers.sourceforge.net/</url>
+    
+    <inceptionYear>2008</inceptionYear>
+    
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<scm>
-		<connection>scm:svn:http://jdbc-wrappers.svn.sourceforge.net/svnroot/jdbc-wrappers/trunk</connection>
-		<developerConnection>scm:svn:https://jdbc-wrappers.svn.sourceforge.net/svnroot/jdbc-wrappers/trunk</developerConnection>
-		<url>http://jdbc-wrappers.svn.sourceforge.net/viewvc/jdbc-wrappers/trunk/</url>
-	</scm>
-	
-	<developers>
-		<developer>
-			<name>Andreas Veithen</name>
-			<id>veithen</id>
-			<email>andreas DOT veithen AT skynet DOT be</email>
-			<url>http://www.ohloh.net/accounts/12757</url>
-		</developer>
-	</developers>
-	
-	<issueManagement>
-		<url>http://sourceforge.net/tracker/?group_id=217533&amp;atid=1040878</url>
-	</issueManagement>
-	
-	<distributionManagement>
-		<!-- Use "mvn site:deploy" to upload -->
-		<site>
-			<id>jdbc-wrappers-site</id>
-			<url>scp://shell.sf.net/home/groups/j/jd/jdbc-wrappers/htdocs/</url>
-		</site>
-		<!-- Use "mvn deploy" to upload -->
-		<snapshotRepository>
-			<id>jdbc-wrappers-snapshot-repository</id>
-			<url>scpexe://shell.sf.net/home/groups/j/jd/jdbc-wrappers/htdocs/repository/</url>
-		</snapshotRepository>
-	</distributionManagement>
-</project>	
-	
+    <scm>
+        <connection>scm:svn:http://jdbc-wrappers.svn.sourceforge.net/svnroot/jdbc-wrappers/trunk</connection>
+        <developerConnection>scm:svn:https://jdbc-wrappers.svn.sourceforge.net/svnroot/jdbc-wrappers/trunk</developerConnection>
+        <url>http://jdbc-wrappers.svn.sourceforge.net/viewvc/jdbc-wrappers/trunk/</url>
+    </scm>
+    
+    <developers>
+        <developer>
+            <name>Andreas Veithen</name>
+            <id>veithen</id>
+            <email>andreas DOT veithen AT skynet DOT be</email>
+            <url>http://www.ohloh.net/accounts/12757</url>
+        </developer>
+    </developers>
+    
+    <issueManagement>
+        <url>http://sourceforge.net/tracker/?group_id=217533&amp;atid=1040878</url>
+    </issueManagement>
+    
+    <distributionManagement>
+        <!-- Use "mvn site:deploy" to upload -->
+        <site>
+            <id>jdbc-wrappers-site</id>
+            <url>scp://shell.sf.net/home/groups/j/jd/jdbc-wrappers/htdocs/</url>
+        </site>
+        <!-- Use "mvn deploy" to upload -->
+        <snapshotRepository>
+            <id>jdbc-wrappers-snapshot-repository</id>
+            <url>scpexe://shell.sf.net/home/groups/j/jd/jdbc-wrappers/htdocs/repository/</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>

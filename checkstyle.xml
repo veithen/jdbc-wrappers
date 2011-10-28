@@ -14,34 +14,34 @@
   -->
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.1//EN" "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
 <module name="Checker">
-	<property name="localeLanguage" value="en"/>
-	<module name="PackageHtml"/>
-	<module name="TreeWalker">
-		<!-- module name="TabCharacter"/ -->
-		<module name="Header">
-			<property name="headerFile" value="java.header"/>
-		</module>
-		<module name="AvoidStarImport"/>
-		<module name="RedundantImport"/>
-		<module name="UnusedImports"/>
-		<module name="DeclarationOrder"/>
-		<module name="NeedBraces"/>
-		<module name="EmptyBlock"/>
-		<module name="ModifierOrder"/>
-		<module name="RedundantModifier"/>
-	    <module name="RedundantThrows">
-			<property name="allowUnchecked" value="true"/>
-			<property name="allowSubclasses" value="true"/>
-		</module>
-		<module name="JavadocType">
-			<property name="authorFormat" value="\S"/>
-			<property name="versionFormat" value="\$Id.*\$"/>
-		</module>
-		<module name="JavadocMethod">
-			<property name="scope" value="protected"/>
-		</module>
-		<module name="JavadocStyle">
-			<property name="checkEmptyJavadoc" value="true"/>
-		</module>
-	</module>
+    <property name="localeLanguage" value="en"/>
+    <module name="PackageHtml"/>
+    <module name="TreeWalker">
+        <!-- module name="TabCharacter"/ -->
+        <module name="Header">
+            <property name="headerFile" value="java.header"/>
+        </module>
+        <module name="AvoidStarImport"/>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
+        <module name="DeclarationOrder"/>
+        <module name="NeedBraces"/>
+        <module name="EmptyBlock"/>
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+        <module name="RedundantThrows">
+            <property name="allowUnchecked" value="true"/>
+            <property name="allowSubclasses" value="true"/>
+        </module>
+        <module name="JavadocType">
+            <property name="authorFormat" value="\S"/>
+            <property name="versionFormat" value="\$Id.*\$"/>
+        </module>
+        <module name="JavadocMethod">
+            <property name="scope" value="protected"/>
+        </module>
+        <module name="JavadocStyle">
+            <property name="checkEmptyJavadoc" value="true"/>
+        </module>
+    </module>
 </module>

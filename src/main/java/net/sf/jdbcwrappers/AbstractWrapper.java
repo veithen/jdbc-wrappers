@@ -25,21 +25,21 @@ public class AbstractWrapper<T> {
     WrapperFactory wrapperFactory;
     T parent;
     
-	/**
-	 * Wrapper initialization method. This method is executed once before any
-	 * delegate method is called on the wrapper. Subclasses can override this
-	 * method to do initialization work. The default implementation does
-	 * nothing.
-	 * @throws SQLException if a database access error occurs
-	 */
-	protected void init() throws SQLException {
-	}
-	
-	public T unwrap() {
-	    if (wrapperFactory.isAllowUnwrap()) {
-	        return parent;
-	    } else {
-	        throw new IllegalStateException("unwrap not allowed");
-	    }
-	}
+    /**
+     * Wrapper initialization method. This method is executed once before any
+     * delegate method is called on the wrapper. Subclasses can override this
+     * method to do initialization work. The default implementation does
+     * nothing.
+     * @throws SQLException if a database access error occurs
+     */
+    protected void init() throws SQLException {
+    }
+    
+    public T unwrap() {
+        if (wrapperFactory.isAllowUnwrap()) {
+            return parent;
+        } else {
+            throw new IllegalStateException("unwrap not allowed");
+        }
+    }
 }
