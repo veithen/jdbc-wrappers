@@ -1,8 +1,8 @@
-package net.sf.jwrappers.jdbc.log;
+package net.sf.jdbcwrappers.log;
 
 import java.sql.SQLException;
 
-import net.sf.jwrappers.jdbc.ConnectionWrapper;
+import net.sf.jdbcwrappers.ConnectionWrapper;
 
 public class LoggingConnectionWrapper extends ConnectionWrapper {
 	private static int transactionIdSequence;

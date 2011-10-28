@@ -1,7 +1,7 @@
-package net.sf.jwrappers.jdbc.nulltype;
+package net.sf.jdbcwrappers.nulltype;
 
-import net.sf.jwrappers.jdbc.PreparedStatementWrapper;
-import net.sf.jwrappers.jdbc.WrapperFactory;
+import net.sf.jdbcwrappers.PreparedStatementWrapper;
+import net.sf.jdbcwrappers.WrapperFactory;
 
 public class NullTypeWrapperFactory extends WrapperFactory {
 	@Override

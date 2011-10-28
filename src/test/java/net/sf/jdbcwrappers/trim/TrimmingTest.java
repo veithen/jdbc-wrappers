@@ -1,4 +1,4 @@
-package net.sf.jwrappers.jdbc.trim;
+package net.sf.jdbcwrappers.trim;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,8 +14,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import net.sf.jwrappers.jdbc.DataSourceWrapper;
-import net.sf.jwrappers.jdbc.trim.TrimmingWrapperFactory;
+import net.sf.jdbcwrappers.DataSourceWrapper;
+import net.sf.jdbcwrappers.trim.TrimmingWrapperFactory;
 import net.sf.springderby.DeleteDatabaseAction;
 import net.sf.springderby.EmbeddedDataSourceFactory;
 import net.sf.springderby.ExecuteSqlScriptsAction;

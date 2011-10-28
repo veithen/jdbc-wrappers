@@ -1,9 +1,9 @@
-package net.sf.jwrappers.jdbc.log;
+package net.sf.jdbcwrappers.log;
 
-import net.sf.jwrappers.jdbc.ConnectionWrapper;
-import net.sf.jwrappers.jdbc.PreparedStatementWrapper;
-import net.sf.jwrappers.jdbc.StatementWrapper;
-import net.sf.jwrappers.jdbc.WrapperFactory;
+import net.sf.jdbcwrappers.ConnectionWrapper;
+import net.sf.jdbcwrappers.PreparedStatementWrapper;
+import net.sf.jdbcwrappers.StatementWrapper;
+import net.sf.jdbcwrappers.WrapperFactory;
 
 public class LoggingWrapperFactory extends WrapperFactory {
 	private final Logger logger = new Logger();

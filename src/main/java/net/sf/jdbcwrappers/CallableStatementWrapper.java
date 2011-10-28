@@ -1,4 +1,4 @@
-package net.sf.jwrappers.jdbc;
+package net.sf.jdbcwrappers;
 
 import java.io.InputStream;
 import java.io.Reader;

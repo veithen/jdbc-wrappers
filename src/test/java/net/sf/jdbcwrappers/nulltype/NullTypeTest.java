@@ -1,4 +1,4 @@
-package net.sf.jwrappers.jdbc.nulltype;
+package net.sf.jdbcwrappers.nulltype;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.Types;
 
 import javax.sql.DataSource;
 
-import net.sf.jwrappers.jdbc.nulltype.NullTypeWrapperFactory;
+import net.sf.jdbcwrappers.nulltype.NullTypeWrapperFactory;
 import net.sf.springderby.DeleteDatabaseAction;
 import net.sf.springderby.EmbeddedDataSourceFactory;
 import net.sf.springderby.ExecuteSqlScriptsAction;

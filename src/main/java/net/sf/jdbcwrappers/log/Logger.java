@@ -1,11 +1,11 @@
-package net.sf.jwrappers.jdbc.log;
+package net.sf.jdbcwrappers.log;
 
 import java.sql.SQLException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import net.sf.jwrappers.jdbc.HasConnection;
+import net.sf.jdbcwrappers.HasConnection;
 
 public class Logger {
 	private final static Log log = LogFactory.getLog("JDBC");

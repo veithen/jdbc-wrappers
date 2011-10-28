@@ -11,7 +11,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package net.sf.jwrappers.jdbc.log;
+package net.sf.jdbcwrappers.log;
 
 import java.sql.Connection;
 
