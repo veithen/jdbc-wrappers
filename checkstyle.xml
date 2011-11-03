@@ -15,12 +15,12 @@
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.1//EN" "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
 <module name="Checker">
     <property name="localeLanguage" value="en"/>
-    <module name="PackageHtml"/>
+    <module name="Header">
+        <property name="headerFile" value="java.header"/>
+    </module>
+    <module name="JavadocPackage"/>
     <module name="TreeWalker">
         <!-- module name="TabCharacter"/ -->
-        <module name="Header">
-            <property name="headerFile" value="java.header"/>
-        </module>
         <module name="AvoidStarImport"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
