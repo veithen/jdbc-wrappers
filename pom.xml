@@ -103,20 +103,6 @@
         </plugins>
     </reporting>
     
-    <repositories>
-        <repository>
-            <id>spring-derby</id>
-            <url>http://spring-derby.sourceforge.net/repository</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    
     <url>http://jdbc-wrappers.sourceforge.net/</url>
     
     <inceptionYear>2008</inceptionYear>
