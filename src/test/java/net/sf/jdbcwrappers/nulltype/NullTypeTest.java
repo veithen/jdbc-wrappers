@@ -1,5 +1,8 @@
 package net.sf.jdbcwrappers.nulltype;
 
+import static org.junit.Assert.fail;
+
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -8,40 +11,45 @@ import java.sql.Types;
 import javax.sql.DataSource;
 
 import net.sf.jdbcwrappers.nulltype.NullTypeWrapperFactory;
-import net.sf.springderby.DeleteDatabaseAction;
-import net.sf.springderby.EmbeddedDataSourceFactory;
-import net.sf.springderby.ExecuteSqlScriptsAction;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.derby.jdbc.EmbeddedDataSource;
+import org.apache.derby.tools.ij;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
 
 public class NullTypeTest {
-    private static EmbeddedDataSourceFactory factory;
     private static EmbeddedDataSource rawDataSource;
     private static DataSource dataSource;
     
     @BeforeClass
     public static void createDataSource() throws Exception {
-        factory = new EmbeddedDataSourceFactory();
-        factory.setDatabaseName("target/testDB");
-        factory.setUser("test");
-        factory.setCreate(true);
-        factory.setBeforeStartupAction(new DeleteDatabaseAction());
-        ExecuteSqlScriptsAction afterCreationAction = new ExecuteSqlScriptsAction();
-        afterCreationAction.setScript(new ClassPathResource("/net/sf/jdbcwrappers/nulltype/schema.sql"));
-        factory.setAfterCreationAction(afterCreationAction);
-        factory.setAfterShutdownAction(new DeleteDatabaseAction());
-        factory.afterPropertiesSet();
-        rawDataSource = (EmbeddedDataSource)factory.getObject();
+        FileUtils.deleteDirectory(new File("target/testDB"));
+        rawDataSource = new EmbeddedDataSource();
+        rawDataSource.setDatabaseName("target/testDB");
+        rawDataSource.setUser("test");
+        rawDataSource.setCreateDatabase("create");
+        Connection connection = rawDataSource.getConnection();
+        try {
+            if (ij.runScript(connection, NullTypeTest.class.getResourceAsStream("schema.sql"), "UTF-8", System.out, "UTF-8") > 0) {
+                fail("Failed to initialize database");
+            }
+        } finally {
+            connection.close();
+        }
         dataSource = new NullTypeWrapperFactory().wrapDataSource(rawDataSource);
     }
     
     @AfterClass
     public static void destroyDataSource() throws Exception {
-        factory.destroy();
+        rawDataSource.setShutdownDatabase("shutdown");
+        try {
+            rawDataSource.getConnection();
+        } catch (SQLException ex) {
+            // This always throws an exception; just continue
+        }
+        FileUtils.deleteDirectory(new File("target/testDB"));
     }
     
     @Test(expected=SQLException.class)

@@ -1,7 +1,9 @@
 package net.sf.jdbcwrappers.trim;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,61 +11,53 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.sql.DataSource;
 
-import net.sf.jdbcwrappers.DataSourceWrapper;
 import net.sf.jdbcwrappers.trim.TrimmingWrapperFactory;
-import net.sf.springderby.DeleteDatabaseAction;
-import net.sf.springderby.EmbeddedDataSourceFactory;
-import net.sf.springderby.ExecuteSqlScriptsAction;
-import net.sf.springderby.OnlineAction;
-import net.sf.springderby.proc.DeclareProceduresAction;
-import net.sf.springderby.proc.annotation.DataAccessLevel;
-import net.sf.springderby.proc.annotation.Procedure;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.derby.jdbc.EmbeddedDataSource;
+import org.apache.derby.tools.ij;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
 
 public class TrimmingTest {
-    private static EmbeddedDataSourceFactory factory;
+    private static EmbeddedDataSource rawDataSource;
     private static DataSource dataSource;
     
     private Connection connection;
     
     @BeforeClass
     public static void createDataSource() throws Exception {
-        factory = new EmbeddedDataSourceFactory();
-        factory.setDatabaseName("target/testDB");
-        factory.setUser("test");
-        factory.setCreate(true);
-        factory.setBeforeStartupAction(new DeleteDatabaseAction());
-        List<OnlineAction> afterCreationActions = new LinkedList<OnlineAction>();
-        {
-            ExecuteSqlScriptsAction action = new ExecuteSqlScriptsAction();
-            action.setScript(new ClassPathResource("/net/sf/jdbcwrappers/trim/schema.sql"));
-            afterCreationActions.add(action);
+        FileUtils.deleteDirectory(new File("target/testDB"));
+        rawDataSource = new EmbeddedDataSource();
+        rawDataSource.setDatabaseName("target/testDB");
+        rawDataSource.setUser("test");
+        rawDataSource.setCreateDatabase("create");
+        Connection connection = rawDataSource.getConnection();
+        try {
+            if (ij.runScript(connection, TrimmingTest.class.getResourceAsStream("schema.sql"), "UTF-8", System.out, "UTF-8") > 0) {
+                fail("Failed to initialize database");
+            }
+        } finally {
+            connection.close();
         }
-        {
-            DeclareProceduresAction action = new DeclareProceduresAction();
-            action.setClassName(TrimmingTest.class.getName());
-            afterCreationActions.add(action);
-        }
-        factory.setAfterCreationActions(afterCreationActions);
-        factory.setAfterShutdownAction(new DeleteDatabaseAction());
-        factory.afterPropertiesSet();
-        dataSource = new TrimmingWrapperFactory().wrapDataSource((DataSource)factory.getObject());
+        dataSource = new TrimmingWrapperFactory().wrapDataSource(rawDataSource);
     }
     
     @AfterClass
     public static void destroyDataSource() throws Exception {
-        factory.destroy();
+        rawDataSource.setShutdownDatabase("shutdown");
+        try {
+            rawDataSource.getConnection();
+        } catch (SQLException ex) {
+            // This always throws an exception; just continue
+        }
+        FileUtils.deleteDirectory(new File("target/testDB"));
     }
     
     @Before
@@ -107,7 +101,6 @@ public class TrimmingTest {
         }
     }
     
-    @Procedure(name="TESTPROC", dataAccessLevel=DataAccessLevel.READS_SQL_DATA)
     public static void testProc(ResultSet[] resultSet) throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:default:connection");
         resultSet[0] = connection.createStatement().executeQuery("SELECT * FROM TEST");

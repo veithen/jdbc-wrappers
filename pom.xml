@@ -22,6 +22,10 @@
     <name>JDBC Wrappers</name>
     <packaging>jar</packaging>
     
+    <properties>
+        <derby.version>10.2.1.6</derby.version>
+    </properties>
+    
     <dependencies>
         <dependency>
             <groupId>commons-logging</groupId>
@@ -35,9 +39,21 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>net.sf.springderby</groupId>
-            <artifactId>spring-derby</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${derby.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbytools</artifactId>
+            <version>${derby.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
