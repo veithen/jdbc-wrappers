@@ -15,11 +15,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sf.jdbcwrappers</groupId>
     <artifactId>jdbc-wrappers</artifactId>
     <version>0.1-SNAPSHOT</version>
     <name>JDBC Wrappers</name>
+    <description>
+        Provides a set of classes that help intercepting JDBC calls.
+    </description>
     <packaging>jar</packaging>
     
     <properties>
@@ -151,8 +159,7 @@
         <developer>
             <name>Andreas Veithen</name>
             <id>veithen</id>
-            <email>andreas DOT veithen AT skynet DOT be</email>
-            <url>http://www.ohloh.net/accounts/12757</url>
+            <email>andreas DOT veithen AT gmail DOT com</email>
         </developer>
     </developers>
     
@@ -166,10 +173,5 @@
             <id>jdbc-wrappers-site</id>
             <url>scp://shell.sf.net/home/groups/j/jd/jdbc-wrappers/htdocs/</url>
         </site>
-        <!-- Use "mvn deploy" to upload -->
-        <snapshotRepository>
-            <id>jdbc-wrappers-snapshot-repository</id>
-            <url>scpexe://shell.sf.net/home/groups/j/jd/jdbc-wrappers/htdocs/repository/</url>
-        </snapshotRepository>
     </distributionManagement>
 </project>
