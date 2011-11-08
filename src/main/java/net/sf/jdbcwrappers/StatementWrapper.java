@@ -143,7 +143,7 @@ public class StatementWrapper implements Statement, HasConnection {
     /**
      * Delegate method for {@link Statement#executeQuery(String)}.
      * This method wraps the {@link ResultSet} object using
-     * {@link WrapperFactory#wrapResultSet(ResultSetType, ResultSet)} with
+     * {@link WrapperFactory#wrapResultSet(ResultSet, Statement, ResultSetType)} with
      * {@link ResultSetType#QUERY}.
      * 
      * {@inheritDoc}
@@ -221,7 +221,7 @@ public class StatementWrapper implements Statement, HasConnection {
     /**
      * Delegate method for {@link Statement#getGeneratedKeys()}.
      * This method wraps the {@link ResultSet} object using
-     * {@link WrapperFactory#wrapResultSet(ResultSetType, ResultSet)} with
+     * {@link WrapperFactory#wrapResultSet(ResultSet, Statement, ResultSetType)} with
      * {@link ResultSetType#KEYS}.
      * 
      * {@inheritDoc}
@@ -278,7 +278,7 @@ public class StatementWrapper implements Statement, HasConnection {
     /**
      * Delegate method for {@link Statement#getResultSet()}.
      * This method wraps the {@link ResultSet} object using
-     * {@link WrapperFactory#wrapResultSet(ResultSetType, ResultSet)} with
+     * {@link WrapperFactory#wrapResultSet(ResultSet, Statement, ResultSetType)} with
      * {@link ResultSetType#QUERY}.
      * 
      * {@inheritDoc}

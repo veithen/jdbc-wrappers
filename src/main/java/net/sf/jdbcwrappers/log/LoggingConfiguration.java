@@ -48,10 +48,11 @@ public class LoggingConfiguration {
     
     /**
      * Specify whether calls to {@link Connection#commit()} and {@link Connection#rollback()} are
-     * logged.
-     * By default this is disabled.
+     * logged. By default this is disabled.
      * 
-     * @return
+     * @param logCommitRollback
+     *            <code>true</code> if transaction commits and rollbacks should be logged,
+     *            <code>false</code> otherwise.
      */
     public void setLogCommitRollback(boolean logCommitRollback) {
         this.logCommitRollback = logCommitRollback;
@@ -62,10 +63,11 @@ public class LoggingConfiguration {
     }
     
     /**
-     * Specify whether SQL statements are pretty printed.
-     * By default this is enabled.
+     * Specify whether SQL statements are pretty printed. By default this is enabled.
      * 
-     * @return
+     * @param prettyPrintSqlStatements
+     *            <code>true</code> if SQL statements should be pretty printed, <code>false</code>
+     *            otherwise
      */
     public void setPrettyPrintSqlStatements(boolean prettyPrintSqlStatements) {
         this.prettyPrintSqlStatements = prettyPrintSqlStatements;

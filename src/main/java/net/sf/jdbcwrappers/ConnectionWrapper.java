@@ -64,7 +64,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#createStatement()}.
      * This method wraps the {@link Statement} object using
-     * {@link WrapperFactory#wrapStatement(Statement, ConnectionWrapper)}.
+     * {@link WrapperFactory#wrapStatement(Statement, Connection)}.
      * 
      * {@inheritDoc}
      */
@@ -73,9 +73,9 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     }
 
     /**
-     * Delegate method for {@link Connection#createStatement(int, int, int))}.
+     * Delegate method for {@link Connection#createStatement(int, int, int)}.
      * This method wraps the {@link Statement} object using
-     * {@link WrapperFactory#wrapStatement(Statement, ConnectionWrapper)}.
+     * {@link WrapperFactory#wrapStatement(Statement, Connection)}.
      * 
      * {@inheritDoc}
      */
@@ -84,9 +84,9 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     }
 
     /**
-     * Delegate method for {@link Connection#createStatement(int, int))}.
+     * Delegate method for {@link Connection#createStatement(int, int)}.
      * This method wraps the {@link Statement} object using
-     * {@link WrapperFactory#wrapStatement(Statement, ConnectionWrapper)}.
+     * {@link WrapperFactory#wrapStatement(Statement, Connection)}.
      * 
      * {@inheritDoc}
      */
@@ -124,7 +124,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#getMetaData()}.
      * This method wraps the {@link DatabaseMetaData} object using
-     * {@link WrapperFactory#wrapDatabaseMetaData(DatabaseMetaData)}.
+     * {@link WrapperFactory#wrapDatabaseMetaData(DatabaseMetaData, Connection)}.
      * 
      * {@inheritDoc}
      */
@@ -189,7 +189,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#prepareCall(String)}.
      * This method wraps the {@link CallableStatement} object using
-     * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement)}.
+     * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement, String)}.
      * 
      * {@inheritDoc}
      */
@@ -200,7 +200,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#prepareCall(String, int, int)}.
      * This method wraps the {@link CallableStatement} object using
-     * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement)}.
+     * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement, String)}.
      * 
      * {@inheritDoc}
      */
@@ -211,7 +211,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#prepareCall(String, int, int, int)}.
      * This method wraps the {@link CallableStatement} object using
-     * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement)}.
+     * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement, String)}.
      * 
      * {@inheritDoc}
      */
@@ -222,7 +222,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#prepareStatement(String, int, int, int)}.
      * This method wraps the {@link PreparedStatement} object using
-     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
+     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement, String)}.
      * 
      * {@inheritDoc}
      */
@@ -233,7 +233,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#prepareStatement(String, int, int)}.
      * This method wraps the {@link PreparedStatement} object using
-     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
+     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement, String)}.
      * 
      * {@inheritDoc}
      */
@@ -244,7 +244,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#prepareStatement(String, int)}.
      * This method wraps the {@link PreparedStatement} object using
-     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
+     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement, String)}.
      * 
      * {@inheritDoc}
      */
@@ -255,7 +255,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#prepareStatement(String, int[])}.
      * This method wraps the {@link PreparedStatement} object using
-     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
+     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement, String)}.
      * 
      * {@inheritDoc}
      */
@@ -266,7 +266,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#prepareStatement(String, String[])}.
      * This method wraps the {@link PreparedStatement} object using
-     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
+     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement, String)}.
      * 
      * {@inheritDoc}
      */
@@ -277,7 +277,7 @@ public class ConnectionWrapper extends AbstractWrapper<Connection> implements Co
     /**
      * Delegate method for {@link Connection#prepareStatement(String)}.
      * This method wraps the {@link PreparedStatement} object using
-     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
+     * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement, String)}.
      * 
      * {@inheritDoc}
      */

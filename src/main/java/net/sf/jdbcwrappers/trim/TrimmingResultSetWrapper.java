@@ -25,7 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * {@link ResultSet} wrapper that automatically trims strings retrieved
+ * {@link java.sql.ResultSet} wrapper that automatically trims strings retrieved
  * from <tt>CHAR</tt> columns.
  * Note that trimming is strictly limited to <tt>CHAR</tt> columns; values
  * retrieved from <tt>VARCHAR</tt> columns remain unchanged.

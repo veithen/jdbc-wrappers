@@ -113,7 +113,7 @@ public class PreparedStatementWrapper extends AbstractWrapper<PreparedStatement>
     }
     
     /**
-     * Delegate method for {@link PreparedStatement#execute(String, int[]}.
+     * Delegate method for {@link PreparedStatement#execute(String, int[])}.
      * This method delegates to the linked {@link StatementWrapper} object.
      * 
      * {@inheritDoc}
@@ -123,7 +123,7 @@ public class PreparedStatementWrapper extends AbstractWrapper<PreparedStatement>
     }
     
     /**
-     * Delegate method for {@link PreparedStatement#execute(String, String[]}.
+     * Delegate method for {@link PreparedStatement#execute(String, String[])}.
      * This method delegates to the linked {@link StatementWrapper} object.
      * 
      * {@inheritDoc}
@@ -458,7 +458,7 @@ public class PreparedStatementWrapper extends AbstractWrapper<PreparedStatement>
      * Delegate method for {@link PreparedStatement#executeQuery()}.
      * This method delegated to the underlying {@link PreparedStatement} object
      * and wraps the {@link ResultSet} object using
-     * {@link WrapperFactory#wrapResultSet(ResultSetType, ResultSet)} with
+     * {@link WrapperFactory#wrapResultSet(ResultSet, java.sql.Statement, ResultSetType)} with
      * {@link ResultSetType#QUERY}.
      * 
      * {@inheritDoc}
