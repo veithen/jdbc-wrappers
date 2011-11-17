@@ -47,7 +47,7 @@ public class TrimmingResultSetWrapper extends ResultSetWrapper {
             int columnCount = metadata.getColumnCount();
             charColumns = new HashSet<String>();
             isCharColumn = new boolean[columnCount];
-            for (int i = 1; i < columnCount; i++) {
+            for (int i = 1; i <= columnCount; i++) {
                 if (metadata.getColumnType(i) == Types.CHAR) {
                     charColumns.add(metadata.getColumnName(i).toUpperCase());
                     isCharColumn[i-1] = true;

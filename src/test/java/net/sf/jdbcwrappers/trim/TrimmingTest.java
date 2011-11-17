@@ -93,6 +93,10 @@ public class TrimmingTest {
             assertEquals("test", rs.getString("CHAR_COL"));
             assertEquals("test", rs.getObject(2));
             assertEquals("test", rs.getObject("CHAR_COL"));
+            assertEquals("test2", rs.getString(4));
+            assertEquals("test2", rs.getString("CHAR_COL2"));
+            assertEquals("test2", rs.getObject(4));
+            assertEquals("test2", rs.getObject("CHAR_COL2"));
         }
         finally {
             statement.close();
