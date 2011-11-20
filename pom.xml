@@ -226,9 +226,9 @@
     
     <distributionManagement>
         <!-- Use "mvn site:deploy" to upload -->
-        <site>
+        <!-- site>
             <id>jdbc-wrappers-site</id>
             <url>scp://shell.sf.net/home/groups/j/jd/jdbc-wrappers/htdocs/</url>
-        </site>
+        </site -->
     </distributionManagement>
 </project>
