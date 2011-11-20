@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sf.jdbc-wrappers</groupId>
     <artifactId>jdbc-wrappers</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1-SNAPSHOT</version>
     <name>JDBC Wrappers</name>
     <description>
         Provides a set of classes that help intercepting JDBC calls.
@@ -207,9 +207,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:svn:http://jdbc-wrappers.svn.sourceforge.net/svnroot/jdbc-wrappers/tags/jdbc-wrappers-0.9.0</connection>
-        <developerConnection>scm:svn:https://jdbc-wrappers.svn.sourceforge.net/svnroot/jdbc-wrappers/tags/jdbc-wrappers-0.9.0</developerConnection>
-        <url>http://jdbc-wrappers.svn.sourceforge.net/viewvc/jdbc-wrappers/tags/jdbc-wrappers-0.9.0</url>
+        <connection>scm:svn:http://jdbc-wrappers.svn.sourceforge.net/svnroot/jdbc-wrappers/trunk</connection>
+        <developerConnection>scm:svn:https://jdbc-wrappers.svn.sourceforge.net/svnroot/jdbc-wrappers/trunk</developerConnection>
+        <url>http://jdbc-wrappers.svn.sourceforge.net/viewvc/jdbc-wrappers/trunk/</url>
     </scm>
     
     <developers>
